@@ -9,15 +9,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.0.8",
     "axios": "^1.7.9",
+    "highlight.js": "^11.8.0",
+    "simple-code-editor": "^2.0.9",
     "vue": "^3.5.13"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
+    "@types/highlight.js": "^9.12.4",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.8",
     "typescript": "~5.7.2",
     "vite": "^6.1.0",
     "vue-tsc": "^2.2.0"
+  },
+  "resolutions": {
+    "highlight.js": "11.8.0"
   }
 }

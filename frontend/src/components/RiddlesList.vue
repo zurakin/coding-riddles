@@ -16,11 +16,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <h2>Riddles List</h2>
-    <ul>
-      <li v-for="riddle in riddles" :key="riddle.id">
-        {{ riddle.title }} - {{ riddle.description }}
+  <div class="container mx-auto p-4 bg-blue-50 min-h-screen">
+    <h2 class="text-2xl font-bold mb-4 text-center">Riddles List</h2>
+    <ul class="space-y-4">
+      <li v-for="riddle in riddles" :key="riddle.id" class="bg-white p-4 rounded-lg shadow-md hover:bg-gray-200">
+        <h3 class="text-xl font-semibold pb-6">{{ riddle.title }}</h3>
+        <p class="text-gray-600">{{ riddle.description }}</p>
       </li>
     </ul>
   </div>
