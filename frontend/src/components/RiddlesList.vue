@@ -2,8 +2,10 @@
 import { ref, onMounted } from 'vue';
 import type { Riddle } from '../types/riddle';
 import api from '../api';
+import { defineEmits } from 'vue';
 
 const riddles = ref<Riddle[]>([]);
+const selectedRiddleId = ref<number | null>(null);
 
 onMounted(async () => {
   try {
@@ -13,13 +15,27 @@ onMounted(async () => {
     console.error('Error fetching riddles:', error);
   }
 });
+
+const emit = defineEmits(['riddle-selected']);
+
+function onRiddleSelected(riddleId: number) {
+  selectedRiddleId.value = riddleId;
+  emit('riddle-selected', riddleId);
+}
+
 </script>
 
 <template>
   <div class="container mx-auto p-4 bg-blue-50 min-h-screen">
-    <h2 class="text-2xl font-bold mb-4 text-center">Riddles List</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center border-b-4 border-blue-500 pb-2">Riddles</h2>
     <ul class="space-y-4">
-      <li v-for="riddle in riddles" :key="riddle.id" class="bg-white p-4 rounded-lg shadow-md hover:bg-gray-200">
+      <li 
+        v-for="riddle in riddles" 
+        @click="onRiddleSelected(riddle.id)" 
+        :key="riddle.id" 
+        :class="{'bg-gray-300': riddle.id === selectedRiddleId, 'bg-white': riddle.id !== selectedRiddleId, 'hover:bg-gray-200': riddle.id !== selectedRiddleId}" 
+        class="p-4 rounded-lg shadow-md"
+      >
         <h3 class="text-xl font-semibold pb-6">{{ riddle.title }}</h3>
         <p class="text-gray-600">{{ riddle.description }}</p>
       </li>

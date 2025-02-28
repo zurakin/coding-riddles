@@ -1,30 +1,23 @@
 package com.zurakin.codingriddles.models;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 
 @Entity
-@Table(name="riddles")
+@Table(name="test_cases")
 @Data
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Riddle {
+public class TestCase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String input;
+    private String output;
 
-    private String title;
-    private String description;
-    private String code;
-    private String validationCode;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
     @JoinColumn(name = "riddle_id")
-    private List<TestCase> testCases;
+    @JsonIgnore
+    private Riddle riddle;
 }

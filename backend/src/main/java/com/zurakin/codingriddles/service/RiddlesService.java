@@ -25,4 +25,8 @@ public class RiddlesService {
     public void deleteRiddle(Long id) {
         repository.deleteById(id);
     }
+
+    public Riddle getRiddleById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 }
