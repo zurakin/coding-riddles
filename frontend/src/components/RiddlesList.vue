@@ -1,19 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import type { Riddle } from '../types/riddle';
+import type { Riddle } from '../model/riddle';
 import api from '../api';
 import { defineEmits } from 'vue';
+import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 
 const riddles = ref<Riddle[]>([]);
 const selectedRiddleId = ref<number | null>(null);
 
 onMounted(async () => {
-  try {
-    const response = await api.get<Riddle[]>('/riddles');
-    riddles.value = response.data;
-  } catch (error) {
-    console.error('Error fetching riddles:', error);
-  }
+  riddles.value = await new RiddlesManagement().listRiddles();
 });
 
 const emit = defineEmits(['riddle-selected']);
