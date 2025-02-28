@@ -1,46 +1,19 @@
 <script setup lang="ts">
 import { ref, watch, type Ref } from 'vue';
 import { defineProps } from 'vue';
+import type { Riddle } from '../model/riddle';
 
 const props = defineProps({
-    riddleId: {
-        type: Number,
+    riddle: {
+        type: Object as () => Riddle | undefined,
         required: true
     }
 });
 
-interface Riddle {
-    id: number;
-    title: string;
-    description: string;
-    code: string;
-    testCases: {
-        id: number;
-        input: string;
-        output: string;
-    }[];
-    validationCode: string;
-}
 
-const riddle: Ref<Riddle | null> = ref<Riddle | null>(null);
+// const riddle: Ref<Riddle | null> = ref<Riddle | null>(null);
 const loading: Ref<boolean> = ref<boolean>(false);
 
-watch(() => props.riddleId, async (newId) => {
-    await fetchRiddle(newId);
-}, { immediate: true });
-
-async function fetchRiddle(id: number) {
-    loading.value = true;
-    try {
-        const response = await fetch(`/api/riddles/${id}`);
-        const data = await response.json();
-        riddle.value = data;
-    } catch (error) {
-        console.error('Error fetching riddle:', error);
-    } finally {
-        loading.value = false;
-    }
-}
 </script>
 
 <template>
@@ -52,7 +25,7 @@ async function fetchRiddle(id: number) {
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
         </div>
-        <div v-else-if="riddle">
+        <div v-else-if="riddle && riddle">
             <h2 class="text-xl font-semibold text-gray-800">{{ riddle.title }}</h2>
             <p class="text-gray-700">{{ riddle.description }}</p>
             <h3 class="text-lg font-medium text-gray-800 mt-4">Test Cases</h3>

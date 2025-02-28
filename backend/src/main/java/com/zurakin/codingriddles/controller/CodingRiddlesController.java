@@ -21,7 +21,7 @@ public class CodingRiddlesController {
     }
 
     @GetMapping
-    public List<Riddle> getRiddles() {
+    public List<Riddle> listRiddles() {
         return service.getAllRiddles();
     }
 
