@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, watch, type Ref } from 'vue';
-import { defineProps } from 'vue';
+
+import { ref, type Ref, watch, onMounted, defineProps } from 'vue';
 import type { Riddle } from '../model/riddle';
+import LoaderSpinner from './LoaderSpinner.vue';
 
 const props = defineProps({
     riddle: {
@@ -10,9 +11,27 @@ const props = defineProps({
     }
 });
 
-
-// const riddle: Ref<Riddle | null> = ref<Riddle | null>(null);
 const loading: Ref<boolean> = ref<boolean>(false);
+const statusPerTestCase: Ref = ref<{ [key: string]: 'default' | 'passed' | 'failed' | 'running' }>({});
+
+const handleTestCaseClick = (testCaseId: any) => {
+    statusPerTestCase.value[testCaseId] = 'running';
+    setTimeout(() => {
+        const result = Math.random() > 0.5 ? 'passed' : 'failed';
+        statusPerTestCase.value[testCaseId] = result;
+    }, 1000);
+};
+
+function resetValidationStatus() {
+    if (props.riddle && props.riddle.testCases) {
+        props.riddle.testCases.forEach(testCase => {
+            statusPerTestCase.value[testCase.id] = 'default';
+        });
+    }
+}
+
+onMounted(resetValidationStatus);
+watch(() => props.riddle, resetValidationStatus);
 
 </script>
 
@@ -20,24 +39,34 @@ const loading: Ref<boolean> = ref<boolean>(false);
     <div class="p-6 w-full mx-auto bg-blue-100 rounded-xl shadow-md space-y-4">
         <h2 class="text-2xl font-bold mb-4 text-center border-b-4 border-blue-500 pb-2">Validation</h2>
         <div v-if="loading" class="text-center">
-            <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
+            <LoaderSpinner/>
         </div>
-        <div v-else-if="riddle && riddle">
+        <div v-else-if="riddle">
             <h2 class="text-xl font-semibold text-gray-800">{{ riddle.title }}</h2>
             <p class="text-gray-700">{{ riddle.description }}</p>
-            <h3 class="text-lg font-medium text-gray-800 mt-4">Test Cases</h3>
-            <ul class="list-disc list-inside space-y-2">
-                <li v-for="testCase in riddle.testCases" :key="testCase.id" class="text-gray-700">
-                    <span class="font-mono bg-gray-100 p-1 rounded">{{ testCase.input }}</span> => <span class="font-mono bg-gray-100 p-1 rounded">{{ testCase.output }}</span>
-                </li>
-            </ul>
+            <h3 class="text-lg font-medium text-gray-800 mt-4">Test Cases: </h3>
+            <div class="space-y-2 p-4">
+                <button v-for="(testCase, index) in riddle.testCases" 
+                        :key="testCase.id" 
+                        :class="{
+                            'bg-blue-500 text-white': statusPerTestCase[testCase.id] === 'default',
+                            'bg-gray-500 text-white': statusPerTestCase[testCase.id] === 'running',
+                            'bg-green-600 hover:bg-green-700 text-white': statusPerTestCase[testCase.id] === 'passed',
+                            'bg-red-700 hover:bg-red-900 text-white': statusPerTestCase[testCase.id] === 'failed'
+                        }"
+                        class="font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-2"
+                        @click="handleTestCaseClick(testCase.id)">
+                    <span v-if="statusPerTestCase[testCase.id] !== 'running'">Run test {{ index + 1 }}</span>
+                    <LoaderSpinner v-if="statusPerTestCase[testCase.id] === 'running'" />
+                </button>
+            </div>
         </div>
         <div v-else>
             <p class="text-gray-700">Select a riddle to see the details.</p>
         </div>
     </div>
 </template>
+
+
+
 <style></style>

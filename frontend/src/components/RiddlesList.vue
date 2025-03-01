@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import type { Riddle } from '../model/riddle';
-import api from '../api';
 import { defineEmits } from 'vue';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 
