@@ -2,6 +2,7 @@ package com.zurakin.codingriddles.controller;
 
 import com.zurakin.codingriddles.models.Riddle;
 import com.zurakin.codingriddles.models.TestCase;
+import com.zurakin.codingriddles.models.dto.RiddleDTO;
 import com.zurakin.codingriddles.models.dto.RiddleRequestDTO;
 import com.zurakin.codingriddles.service.RiddlesService;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,18 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/riddles")
-public class CodingRiddlesController {
+public class RiddlesController {
     private final RiddlesService service;
 
-    public CodingRiddlesController(RiddlesService service) {
+    public RiddlesController(RiddlesService service) {
         this.service = service;
     }
 
     @GetMapping
-    public List<Riddle> listRiddles() {
-        return service.getAllRiddles();
+    public List<RiddleDTO> listRiddles() {
+        return service.getAllRiddles().stream()
+                .map(riddle -> new RiddleDTO(riddle.getId(), riddle.getTitle(), riddle.getDescription()))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -48,7 +51,7 @@ public class CodingRiddlesController {
 
         riddle.setTestCases(testCases);
 
-        Riddle savedRiddle = service.addRiddle(riddle);
+        Riddle savedRiddle = service.saveRiddle(riddle);
 
         return ResponseEntity.ok(savedRiddle);
     }

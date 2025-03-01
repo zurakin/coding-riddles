@@ -18,7 +18,7 @@ public class RiddlesService {
         return repository.findAll();
     }
 
-    public Riddle addRiddle(Riddle riddle) {
+    public Riddle saveRiddle(Riddle riddle) {
         return repository.save(riddle);
     }
 
