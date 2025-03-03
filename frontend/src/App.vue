@@ -9,9 +9,18 @@ import { RiddlesManagement } from './RiddlesManagement/riddles_management';
 
 const selectedRiddle: Ref<Riddle | undefined> = ref(undefined);
 const code: Ref<string> = ref('// Select a riddle to start coding');
+const terminal: Ref<string> = ref('Run your code to see the output here');
 
 const codeChanged = () => {
   // console.log("Code updated");
+};
+
+const testExecuted = (output: string, append: boolean = false) => {
+  if (append) {
+    terminal.value += output + "\n";
+  } else {
+    terminal.value = output;
+  }
 };
 
 const onRiddleSelected = async (riddleIdentifier: number) => {
@@ -36,11 +45,11 @@ const onRiddleSelected = async (riddleIdentifier: number) => {
         :highlight="hljs" :languages="[['javascript', 'JavaScript']]" />
       </div>
       <div class="h-3/10 bg-gray-500 ">
-        Terminal
+        <CodeEditor :read-only="true" theme="github" :display-language="false" width="100%" height="100%" :header="false" v-model="terminal"/>
       </div>
     </div>
     <div class="w-1/5 flex">
-      <Validation :riddle="selectedRiddle"/>
+      <Validation :riddle="selectedRiddle"  @test-executed="testExecuted" :code="code" />
     </div>
   </div>
 </template>

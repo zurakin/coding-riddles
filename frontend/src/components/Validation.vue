@@ -3,22 +3,35 @@
 import { ref, type Ref, watch, onMounted, defineProps } from 'vue';
 import type { Riddle } from '../model/riddle';
 import LoaderSpinner from './LoaderSpinner.vue';
+import { JavaScriptExecutor } from '../executor/javascript_executor';
 
 const props = defineProps({
     riddle: {
         type: Object as () => Riddle | undefined,
         required: true
+    }, 
+    code: 
+    {
+        type: String,
+        required: false
     }
 });
-
+const emit = defineEmits(["test-executed"]);
 const loading: Ref<boolean> = ref<boolean>(false);
 const statusPerTestCase: Ref = ref<{ [key: string]: 'default' | 'passed' | 'failed' | 'running' }>({});
 
 const handleTestCaseClick = (testCaseId: any) => {
     statusPerTestCase.value[testCaseId] = 'running';
+    
     setTimeout(() => {
         const result = Math.random() > 0.5 ? 'passed' : 'failed';
         statusPerTestCase.value[testCaseId] = result;
+
+        // Emit event with result
+        if (props.code) {
+            const output = new JavaScriptExecutor().execute(props.code);
+            emit("test-executed", `Test Case ${testCaseId}: [${result}] - ${output}`, false);
+        }
     }, 1000);
 };
 
