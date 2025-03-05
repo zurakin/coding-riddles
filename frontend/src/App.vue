@@ -30,6 +30,17 @@ const onRiddleSelected = async (riddleIdentifier: number) => {
   }
 };
 
+import { shallowRef } from 'vue'
+import { VueMonacoEditor } from '@guolao/vue-monaco-editor'
+const MONACO_EDITOR_OPTIONS = {
+  automaticLayout: true,
+  formatOnType: true,
+  formatOnPaste: true,
+}
+
+const editorRef = shallowRef();
+const handleMount = (editor:any) => (editorRef.value = editor);
+
 </script>
 
 <template>
@@ -39,10 +50,12 @@ const onRiddleSelected = async (riddleIdentifier: number) => {
     </div>
     <div class="w-3/5">
       <div class="h-7/10">
-        <CodeEditor :line-nums="true" width="100%" height="100%"
-        :display-language="true" :header="true"
-        v-model="code" @update:modelValue="codeChanged"
-        :highlight="hljs" :languages="[['javascript', 'JavaScript']]" />
+        <vue-monaco-editor
+          v-model:value="code"
+          theme="vs-dark" language="javascript"
+          :options="MONACO_EDITOR_OPTIONS"
+          @mount="handleMount"
+        />
       </div>
       <div class="h-3/10 bg-gray-500 ">
         <CodeEditor :read-only="true" theme="github" :display-language="false" width="100%" height="100%" :header="false" v-model="terminal"/>
