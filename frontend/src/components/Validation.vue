@@ -8,7 +8,7 @@ import { JavaScriptExecutor } from '../executor/javascript_executor';
 const props = defineProps({
     riddle: {
         type: Object as () => Riddle | undefined,
-        required: true
+        required: false
     }, 
     code: 
     {
