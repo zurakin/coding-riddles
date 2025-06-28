@@ -21,19 +21,24 @@ function onRiddleSelected(riddleId: number) {
 </script>
 
 <template>
-  <div class="container mx-auto p-4 bg-blue-50 min-h-screen">
-    <h2 class="text-2xl font-bold mb-4 text-center border-b-4 border-blue-500 pb-2">Riddles</h2>
-    <ul class="space-y-4">
+  <div class="bg-blue-50 p-4 rounded-xl shadow w-full">
+    <h2 class="text-xl font-bold mb-4 text-center border-b-2 border-blue-400 pb-2 text-blue-800">Riddles</h2>
+    <ul class="space-y-2">
       <li 
         v-for="riddle in riddles" 
         @click="onRiddleSelected(riddle.id)" 
         :key="riddle.id" 
-        :class="{'bg-gray-300': riddle.id === selectedRiddleId, 'bg-white': riddle.id !== selectedRiddleId, 'hover:bg-gray-200': riddle.id !== selectedRiddleId}" 
-        class="p-4 rounded-lg shadow-md"
+        :class="[
+          'cursor-pointer p-2 rounded-md transition-colors',
+          riddle.id === selectedRiddleId ? 'bg-blue-200 text-blue-900 font-semibold' : 'bg-white hover:bg-blue-100',
+        ]"
       >
-        <h3 class="text-xl font-semibold pb-6">{{ riddle.title }}</h3>
-        <p class="text-gray-600">{{ riddle.description }}</p>
+        <h3 class="text-base font-bold">{{ riddle.title }}</h3>
+        <p class="text-gray-600 text-sm">{{ riddle.description }}</p>
       </li>
     </ul>
   </div>
 </template>
+
+<style scoped>
+</style>
