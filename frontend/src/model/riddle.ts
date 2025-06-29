@@ -3,10 +3,13 @@ export interface Riddle {
   title: string;
   description: string;
   code: string;
-  testCases: {
-      id: number;
-      input: string;
-      output: string;
-  }[];
+  testCases: TestCase[];
   validationCode: string;
+  functionName?: string;
+}
+
+export interface TestCase {
+  id: number;
+  input: string;
+  output: string;
 }

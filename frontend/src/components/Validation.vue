@@ -3,7 +3,7 @@
 import { ref, type Ref, watch, onMounted, defineProps } from 'vue';
 import type { Riddle } from '../model/riddle';
 import LoaderSpinner from './LoaderSpinner.vue';
-import { JavaScriptExecutor } from '../executor/javascript_executor';
+import { LocalJavaScriptValidator } from '../Validator/LocalJavaScriptValidator';
 
 const props = defineProps({
     riddle: {
@@ -19,20 +19,19 @@ const props = defineProps({
 const emit = defineEmits(["test-executed"]);
 const loading: Ref<boolean> = ref<boolean>(false);
 const statusPerTestCase: Ref = ref<{ [key: string]: 'default' | 'passed' | 'failed' | 'running' }>({});
+const validator = new LocalJavaScriptValidator();
 
-const handleTestCaseClick = (testCaseId: any) => {
+const handleTestCaseClick = (testCaseId: number) => {
     statusPerTestCase.value[testCaseId] = 'running';
-    
-    setTimeout(() => {
-        const result = Math.random() > 0.5 ? 'passed' : 'failed';
-        statusPerTestCase.value[testCaseId] = result;
 
-        // Emit event with result
-        if (props.code) {
-            const output = new JavaScriptExecutor().execute(props.code);
-            emit("test-executed", `Test Case ${testCaseId}: [${result}] - ${output}`, false);
-        }
-    }, 1000);
+    if (props.riddle && props.code) {
+        const result = validator.validateTestCase(props.code, props.riddle, testCaseId);
+        statusPerTestCase.value[testCaseId] = result.status ? 'passed' : 'failed';
+        emit('test-executed', result.message, false);
+        return;
+    }
+    statusPerTestCase.value[testCaseId] = 'failed';
+    emit('test-executed', `Test Case ${testCaseId}: [failed] - Test case, validation code, or user code missing`, false);
 };
 
 function resetValidationStatus() {
@@ -49,16 +48,18 @@ watch(() => props.riddle, resetValidationStatus);
 </script>
 
 <template>
-    <div class="p-6 w-full mx-auto bg-blue-100 rounded-xl shadow-md space-y-4">
-        <h2 class="text-2xl font-bold mb-4 text-center border-b-4 border-blue-500 pb-2">Validation</h2>
-        <div v-if="loading" class="text-center">
+    <div class="p-8 w-full max-w-2xl mx-auto bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl shadow-xl space-y-6 border border-blue-300">
+        <h2 class="text-3xl font-extrabold mb-6 text-center border-b-4 border-blue-500 pb-3 tracking-wide text-blue-800 drop-shadow">Validation</h2>
+        <div v-if="loading" class="text-center py-8">
             <LoaderSpinner/>
         </div>
         <div v-else-if="riddle">
-            <h2 class="text-xl font-semibold text-gray-800">{{ riddle.title }}</h2>
-            <p class="text-gray-700">{{ riddle.description }}</p>
-            <h3 class="text-lg font-medium text-gray-800 mt-4">Test Cases: </h3>
-            <div class="space-y-2 p-4">
+            <div class="mb-4 text-center">
+                <h2 class="text-2xl font-bold text-blue-900">{{ riddle.title }}</h2>
+                <p class="text-gray-700 italic mt-2">{{ riddle.description }}</p>
+            </div>
+            <h3 class="text-lg font-semibold text-blue-700 mt-6 mb-2 text-center">Test Cases</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2">
                 <button v-for="(testCase, index) in riddle.testCases" 
                         :key="testCase.id" 
                         :class="{
@@ -69,17 +70,30 @@ watch(() => props.riddle, resetValidationStatus);
                         }"
                         class="font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-2"
                         @click="handleTestCaseClick(testCase.id)">
-                    <span v-if="statusPerTestCase[testCase.id] !== 'running'">Run test {{ index + 1 }}</span>
+                    <span v-if="statusPerTestCase[testCase.id] !== 'running'">Test {{ index + 1 }}</span>
                     <LoaderSpinner v-if="statusPerTestCase[testCase.id] === 'running'" />
                 </button>
             </div>
         </div>
-        <div v-else>
-            <p class="text-gray-700">Select a riddle to see the details.</p>
+        <div v-else class="text-center py-8">
+            <p class="text-gray-600 text-lg">Select a riddle to see the details.</p>
         </div>
     </div>
 </template>
 
+<style scoped>
+/* Add a subtle fade-in animation for the main card */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
+.p-8 {
+  animation: fadeIn 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-<style></style>
+button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+</style>
