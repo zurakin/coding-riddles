@@ -3,7 +3,7 @@
 import { ref, type Ref, watch, onMounted, defineProps } from 'vue';
 import type { Riddle } from '../model/riddle';
 import LoaderSpinner from './LoaderSpinner.vue';
-import { JavaScriptExecutor } from '../executor/javascript_executor';
+import { LocalJavaScriptValidator } from '../Validator/LocalJavaScriptValidator';
 
 const props = defineProps({
     riddle: {
@@ -19,20 +19,19 @@ const props = defineProps({
 const emit = defineEmits(["test-executed"]);
 const loading: Ref<boolean> = ref<boolean>(false);
 const statusPerTestCase: Ref = ref<{ [key: string]: 'default' | 'passed' | 'failed' | 'running' }>({});
+const validator = new LocalJavaScriptValidator();
 
-const handleTestCaseClick = (testCaseId: any) => {
+const handleTestCaseClick = (testCaseId: number) => {
     statusPerTestCase.value[testCaseId] = 'running';
-    
-    setTimeout(() => {
-        const result = Math.random() > 0.5 ? 'passed' : 'failed';
-        statusPerTestCase.value[testCaseId] = result;
 
-        // Emit event with result
-        if (props.code) {
-            const output = new JavaScriptExecutor().execute(props.code);
-            emit("test-executed", `Test Case ${testCaseId}: [${result}] - ${output}`, false);
-        }
-    }, 1000);
+    if (props.riddle && props.code) {
+        const result = validator.validateTestCase(props.code, props.riddle, testCaseId);
+        statusPerTestCase.value[testCaseId] = result.status ? 'passed' : 'failed';
+        emit('test-executed', result.message, false);
+        return;
+    }
+    statusPerTestCase.value[testCaseId] = 'failed';
+    emit('test-executed', `Test Case ${testCaseId}: [failed] - Test case, validation code, or user code missing`, false);
 };
 
 function resetValidationStatus() {

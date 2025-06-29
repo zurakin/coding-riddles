@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import RiddlesList from './components/RiddlesList.vue';
-import hljs from 'highlight.js';
-import CodeEditor from 'simple-code-editor';
 import Validation from './components/Validation.vue';
 import type { Riddle } from './model/riddle';
 import { RiddlesManagement } from './RiddlesManagement/riddles_management';
