@@ -1,6 +1,5 @@
 package com.zurakin.codingriddles.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
