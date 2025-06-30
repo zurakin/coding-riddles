@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import type { Riddle } from '../model/riddle';
 import { defineEmits } from 'vue';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
@@ -7,9 +7,21 @@ import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 const riddles = ref<Riddle[]>([]);
 const selectedRiddleId = ref<number | null>(null);
 
+const props = defineProps<{ activeRiddleId?: number }>();
+
 onMounted(async () => {
   riddles.value = await new RiddlesManagement().listRiddles();
+  if (props.activeRiddleId) {
+    selectedRiddleId.value = props.activeRiddleId;
+  }
 });
+
+watch(
+  () => props.activeRiddleId,
+  (newId) => {
+    if (newId) selectedRiddleId.value = newId;
+  }
+);
 
 const emit = defineEmits(['riddle-selected']);
 
