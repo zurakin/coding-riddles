@@ -48,17 +48,18 @@ watch(() => props.riddle, resetValidationStatus);
 </script>
 
 <template>
-    <div class="p-8 w-full max-w-2xl mx-auto bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl shadow-xl space-y-6 border border-blue-300">
+    <div class="p-8 w-full max-w-2xl mx-auto bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl shadow-xl space-y-6 border border-blue-300 overflow-y-auto h-90% min-h-0 ">
         <h2 class="text-3xl font-extrabold mb-6 text-center border-b-4 border-blue-500 pb-3 tracking-wide text-blue-800 drop-shadow">Validation</h2>
         <div v-if="loading" class="text-center py-8">
             <LoaderSpinner/>
         </div>
         <div v-else-if="riddle">
-            <div class="mb-4 text-center">
-                <h2 class="text-2xl font-bold text-blue-900">{{ riddle.title }}</h2>
-                <p class="text-gray-700 italic mt-2">{{ riddle.description }}</p>
+            <h2 class="text-2xl font-bold text-blue-900 mb-2 text-center">{{ riddle.title }}</h2>
+            <div class="mb-4 text-center max-h-[40vh] overflow-y-auto bg-white/80 rounded-lg p-4 relative scrollable-section">
+                <p class="text-gray-700 italic mt-2 whitespace-pre-line">{{ riddle.description }}</p>
             </div>
-            <h3 class="text-lg font-semibold text-blue-700 mt-6 mb-2 text-center">Test Cases</h3>
+            <div class="scroll-fade-bottom"></div>
+            <h3 class="text-2xl font-semibold text-blue-700 mt-6 mb-2 text-center">Test Cases</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2">
                 <button v-for="(testCase, index) in riddle.testCases" 
                         :key="testCase.id" 
@@ -95,5 +96,37 @@ watch(() => props.riddle, resetValidationStatus);
 button[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.scrollable-section {
+  box-shadow: 0 2px 8px 0 rgba(30, 64, 175, 0.07);
+  transition: box-shadow 0.2s;
+  position: relative;
+}
+.scrollable-section:focus,
+.scrollable-section:hover {
+  box-shadow: 0 4px 16px 0 rgba(30, 64, 175, 0.13);
+}
+.scrollable-section::-webkit-scrollbar {
+  width: 8px;
+  background: #e0e7ff;
+  border-radius: 8px;
+}
+.scrollable-section::-webkit-scrollbar-thumb {
+  background: #a5b4fc;
+  border-radius: 8px;
+}
+
+.scroll-fade-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18px;
+  pointer-events: none;
+  opacity: 0.7;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(164,180,252,0.5));
+  z-index: 2;
+  border-radius: 0 0 16px 16px;
 }
 </style>

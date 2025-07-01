@@ -19,6 +19,8 @@ public class Riddle {
     private Long id;
 
     private String title;
+
+    @Lob
     private String description;
     private String code;
     private String validationCode;

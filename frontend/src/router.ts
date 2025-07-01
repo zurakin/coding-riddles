@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import RiddlePage from './pages/RiddlePage.vue';
 import About from './pages/About.vue';
 import RiddlesPage from './pages/RiddlesPage.vue';
+import SubmitRiddlePage from './pages/SubmitRiddlePage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -23,6 +24,11 @@ const routes: RouteRecordRaw[] = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/submit',
+    name: 'SubmitRiddle',
+    component: SubmitRiddlePage
   }
 ];
 
