@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import RiddlePage from './pages/RiddlePage.vue';
 import About from './pages/About.vue';
+import RiddlesPage from './pages/RiddlesPage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -16,7 +17,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/riddles',
     name: 'Riddles',
-    component: RiddlePage
+    component: RiddlesPage
   },
   {
     path: '/about',

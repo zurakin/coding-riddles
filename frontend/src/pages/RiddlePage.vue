@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, type Ref, onMounted, watch } from 'vue';
-import RiddlesList from '../components/RiddlesList.vue';
 import Validation from '../components/Validation.vue';
 import type { Riddle } from '../model/riddle';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
@@ -67,16 +66,6 @@ const handleMount = (editor: any) => (editorRef.value = editor);
 
 <template>
   <main class="flex-1 flex flex-row gap-4 px-2 py-6 w-full">
-    <!-- Left: Riddles List -->
-    <aside class="w-[260px] max-w-xs flex flex-col gap-4">
-      <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex-1 flex flex-col">
-        <RiddlesList 
-          @riddle-selected="onRiddleSelected" 
-          :activeRiddleId="selectedRiddle?.id" 
-          class="flex-1" 
-        />
-      </div>
-    </aside>
     <!-- Center: Code Editor & Test Output -->
     <section class="flex-1 flex flex-col gap-4 min-w-0">
       <div class="flex-1 bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex flex-col min-w-0">
