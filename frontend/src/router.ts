@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'Home',
-    component: RiddlePage
+    component: RiddlesPage
   },
   {
     path: '/riddle/:id',
