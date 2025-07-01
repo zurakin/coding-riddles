@@ -7,6 +7,10 @@
       <h1 class="text-3xl font-extrabold text-blue-700 tracking-wide">Coding Riddles</h1>
       <span class="text-base text-blue-400 font-semibold">Challenge your mind with fun riddles!</span>
     </header>
+    <nav class="w-full bg-blue-700 text-white px-8 py-2 flex items-center gap-6 shadow">
+      <router-link to="/riddles" class="hover:underline font-semibold">Riddles</router-link>
+      <router-link to="/about" class="hover:underline font-semibold">About</router-link>
+    </nav>
     <router-view />
   </div>
 </template>
