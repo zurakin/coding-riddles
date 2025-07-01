@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, type Ref, onMounted, watch } from 'vue';
-import RiddlesList from '../components/RiddlesList.vue';
 import Validation from '../components/Validation.vue';
 import type { Riddle } from '../model/riddle';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
@@ -67,60 +66,52 @@ const handleMount = (editor: any) => (editorRef.value = editor);
 
 <template>
   <main class="flex-1 flex flex-row gap-4 px-2 py-6 w-full">
-    <!-- Left: Riddles List -->
-    <aside class="w-[260px] max-w-xs flex flex-col gap-4">
-      <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex-1 flex flex-col">
-        <RiddlesList 
-          @riddle-selected="onRiddleSelected" 
-          :activeRiddleId="selectedRiddle?.id" 
-          class="flex-1" 
-        />
-      </div>
-    </aside>
     <!-- Center: Code Editor & Test Output -->
     <section class="flex-1 flex flex-col gap-4 min-w-0">
-      <div class="flex-1 bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex flex-col min-w-0">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="text-xl font-bold text-blue-700">Code Editor</h2>
+      <div class="flex flex-col min-w-0 flex-1 gap-4" style="height: 100%; min-height: 0;">
+        <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex flex-col min-w-0" style="flex-basis: 70%; flex-grow: 0; flex-shrink: 0; height: 70%; min-height: 0;">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xl font-bold text-blue-700">Code Editor</h2>
+          </div>
+          <vue-monaco-editor
+            v-model:value="code"
+            theme="vs"
+            language="javascript"
+            :options="MONACO_EDITOR_OPTIONS"
+            @mount="handleMount"
+            width="100%"
+            height="100%"
+            class="rounded-lg border border-blue-100 bg-white min-w-0 flex-1"
+          />
         </div>
-        <vue-monaco-editor
-          v-model:value="code"
-          theme="vs"
-          language="javascript"
-          :options="MONACO_EDITOR_OPTIONS"
-          @mount="handleMount"
-          width="100%"
-          height="100%"
-          class="rounded-lg border border-blue-100 bg-white min-w-0 flex-1"
-        />
-      </div>
-      <div class="bg-blue-50 rounded-2xl shadow border border-blue-200 p-4 flex flex-col min-h-[180px] min-w-0">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="text-lg font-semibold text-blue-700">Test Output</h2>
+        <div class="bg-blue-50 rounded-2xl shadow border border-blue-200 p-4 flex flex-col min-h-[180px] min-w-0" style="flex-basis: 30%; flex-grow: 0; flex-shrink: 0; height: 30%; min-height: 0;">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-lg font-semibold text-blue-700">Test Output</h2>
+          </div>
+          <vue-monaco-editor
+            v-model:value="terminal"
+            theme="vs-light"
+            language="plaintext"
+            :options="{
+              readOnly: true,
+              minimap: { enabled: false },
+              lineNumbers: 'off',
+              fontSize: 14,
+              fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace',
+              wordWrap: 'on',
+              scrollbar: { vertical: 'auto', horizontal: 'auto' },
+              automaticLayout: true
+            }"
+            width="100%"
+            height="100%"
+            class="rounded-lg border border-blue-100 bg-white min-w-0 flex-1"
+          />
         </div>
-        <vue-monaco-editor
-          v-model:value="terminal"
-          theme="vs-light"
-          language="plaintext"
-          :options="{
-            readOnly: true,
-            minimap: { enabled: false },
-            lineNumbers: 'off',
-            fontSize: 14,
-            fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace',
-            wordWrap: 'on',
-            scrollbar: { vertical: 'auto', horizontal: 'auto' },
-            automaticLayout: true
-          }"
-          width="100%"
-          height="120px"
-          class="rounded-lg border border-blue-100 bg-white min-w-0"
-        />
       </div>
     </section>
     <!-- Right: Validation -->
-    <aside class="w-[340px] max-w-sm flex flex-col gap-4">
-      <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex-1 flex flex-col">
+    <aside class="w-[32%] max-w-[40%] flex flex-col gap-4 h-full max-h-full">
+      <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex-1 flex flex-col max-h-full overflow-y-auto">
         <Validation :riddle="selectedRiddle" @test-executed="testExecuted" :code="code" class="flex-1" />
       </div>
     </aside>

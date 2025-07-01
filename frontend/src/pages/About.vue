@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-2xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-xl border border-blue-200">
-    <h2 class="text-3xl font-extrabold text-blue-700 mb-4">About Coding Riddles</h2>
+  <div class="max-w-3xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-xl border border-blue-200 overflow-y-auto h-[90%] min-h-0 ">
+    <h2 class="text-3xl font-extrabold text-blue-700 mb-6 text-center">About Coding Riddles</h2>
     <p class="text-lg text-gray-700 mb-4">
       <strong>Coding Riddles</strong> is a platform dedicated to one simple but challenging idea:<br>
       <span class="italic text-blue-800">making classic riddles expressible—and verifiable—through code.</span>
