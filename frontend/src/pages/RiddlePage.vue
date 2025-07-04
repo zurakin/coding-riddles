@@ -1,25 +1,17 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, watch } from 'vue';
-import Validation from '../components/Validation.vue';
+import { ref, type Ref, onMounted } from 'vue';
 import type { Riddle } from '../model/riddle';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 import { useRoute, useRouter } from 'vue-router';
+import RiddleView from '../components/RiddleView.vue';
+import LoaderSpinner from '../components/LoaderSpinner.vue';
 
 const selectedRiddle: Ref<Riddle | undefined> = ref(undefined);
-const code: Ref<string> = ref('// Select a riddle to start coding');
-const terminal: Ref<string> = ref('Run your code to see the output here');
+const code: Ref<string> = ref('// Loading riddle code...');
 const loadingRiddle = ref(false);
 
 const route = useRoute();
 const router = useRouter();
-
-const testExecuted = (output: string, append: boolean = false) => {
-  if (append) {
-    terminal.value += output + "\n";
-  } else {
-    terminal.value = output;
-  }
-};
 
 const onRiddleSelected = async (riddleIdentifier: number, skipPush = false) => {
   loadingRiddle.value = true;
@@ -43,78 +35,14 @@ onMounted(async () => {
   }
 });
 
-watch(
-  () => route.params.id,
-  async (newId, oldId) => {
-    if (route.name === 'Riddle' && newId && newId !== oldId) {
-      await onRiddleSelected(Number(newId), true);
-    }
-  }
-);
-
-import { shallowRef } from 'vue'
-import { VueMonacoEditor } from '@guolao/vue-monaco-editor'
-const MONACO_EDITOR_OPTIONS = {
-  automaticLayout: true,
-  formatOnType: true,
-  formatOnPaste: true,
-}
-
-const editorRef = shallowRef();
-const handleMount = (editor: any) => (editorRef.value = editor);
 </script>
 
 <template>
   <main class="flex-1 flex flex-row gap-4 px-2 py-6 w-full">
-    <!-- Center: Code Editor & Test Output -->
-    <section class="flex-1 flex flex-col gap-4 min-w-0">
-      <div class="flex flex-col min-w-0 flex-1 gap-4" style="height: 100%; min-height: 0;">
-        <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex flex-col min-w-0" style="flex-basis: 70%; flex-grow: 0; flex-shrink: 0; height: 70%; min-height: 0;">
-          <div class="flex items-center justify-between mb-2">
-            <h2 class="text-xl font-bold text-blue-700">Code Editor</h2>
-          </div>
-          <vue-monaco-editor
-            v-model:value="code"
-            theme="vs"
-            language="javascript"
-            :options="MONACO_EDITOR_OPTIONS"
-            @mount="handleMount"
-            width="100%"
-            height="100%"
-            class="rounded-lg border border-blue-100 bg-white min-w-0 flex-1"
-          />
-        </div>
-        <div class="bg-blue-50 rounded-2xl shadow border border-blue-200 p-4 flex flex-col min-h-[180px] min-w-0" style="flex-basis: 30%; flex-grow: 0; flex-shrink: 0; height: 30%; min-height: 0;">
-          <div class="flex items-center justify-between mb-2">
-            <h2 class="text-lg font-semibold text-blue-700">Test Output</h2>
-          </div>
-          <vue-monaco-editor
-            v-model:value="terminal"
-            theme="vs-light"
-            language="plaintext"
-            :options="{
-              readOnly: true,
-              minimap: { enabled: false },
-              lineNumbers: 'off',
-              fontSize: 14,
-              fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace',
-              wordWrap: 'on',
-              scrollbar: { vertical: 'auto', horizontal: 'auto' },
-              automaticLayout: true
-            }"
-            width="100%"
-            height="100%"
-            class="rounded-lg border border-blue-100 bg-white min-w-0 flex-1"
-          />
-        </div>
-      </div>
-    </section>
-    <!-- Right: Validation -->
-    <aside class="w-[32%] max-w-[40%] flex flex-col gap-4 h-full max-h-full">
-      <div class="bg-white rounded-2xl shadow-xl border border-blue-200 p-4 flex-1 flex flex-col max-h-full overflow-y-auto">
-        <Validation :riddle="selectedRiddle" @test-executed="testExecuted" :code="code" class="flex-1" />
-      </div>
-    </aside>
+    <div v-if="loadingRiddle" class="w-full flex items-center justify-center min-h-[400px]">
+      <LoaderSpinner class="w-16 h-16 text-blue-700" />
+    </div>
+    <RiddleView v-else-if="selectedRiddle" :riddle="selectedRiddle" />
   </main>
 </template>
 
