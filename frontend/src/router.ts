@@ -3,6 +3,7 @@ import RiddlePage from './pages/RiddlePage.vue';
 import About from './pages/About.vue';
 import RiddlesPage from './pages/RiddlesPage.vue';
 import SubmitRiddlePage from './pages/SubmitRiddlePage.vue';
+import PreviewBeforeSubmitPage from './pages/PreviewBeforeSubmitPage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -29,6 +30,11 @@ const routes: RouteRecordRaw[] = [
     path: '/submit',
     name: 'SubmitRiddle',
     component: SubmitRiddlePage
+  },
+  {
+    path: '/preview-submit',
+    name: 'PreviewBeforeSubmitPage',
+    component: () => PreviewBeforeSubmitPage
   }
 ];
 

@@ -4,6 +4,7 @@ import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import LoaderSpinner from '../components/LoaderSpinner.vue';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 import type { TestCase } from '../model/riddle';
+import { useRouter } from 'vue-router';
 
 const title = ref('');
 const description = ref('');
@@ -14,7 +15,9 @@ const testCases = ref([
 ]);
 const loading = ref(false);
 const message = ref('');
+const previewing = ref(false);
 
+const router = useRouter();
 const riddlesManagement = new RiddlesManagement();
 
 function toTestCaseArray(): Omit<TestCase, 'id'>[] {
@@ -46,10 +49,25 @@ async function submitRiddle() {
     loading.value = false;
   }
 }
+
+function handlePreview() {
+  previewing.value = true;
+  const testCasesJson = JSON.stringify(toTestCaseArray());
+  router.push({
+    name: 'PreviewBeforeSubmitPage',
+    query: {
+      title: title.value,
+      description: description.value,
+      code: code.value,
+      validationCode: validationCode.value,
+      testCases: testCasesJson,
+    },
+  });
+}
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-full min-h-[calc(100vh-120px)] py-8 bg-gradient-to-br from-blue-50 to-slate-100">
+  <div v-if="!previewing" class="flex flex-col items-center w-full py-8 bg-gradient-to-br from-blue-50 to-slate-100 overflow-y-auto h-[90%] min-h-0 pb-16">
     <div class="w-full max-w-[1600px] flex-1 flex flex-col bg-white rounded-2xl shadow-xl border border-blue-200 p-8">
       <h2 class="text-3xl font-extrabold text-blue-700 mb-6 text-center">Submit a New Riddle</h2>
       <form @submit.prevent="submitRiddle" class="space-y-6 flex-1 flex flex-col">
@@ -88,6 +106,9 @@ async function submitRiddle() {
         </div>
         <div v-if="message" :class="message.includes('success') ? 'text-green-700' : 'text-red-700'">{{ message }}</div>
         <div class="flex justify-end">
+          <button type="button" @click="handlePreview" :disabled="loading" class="px-6 py-2 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 disabled:opacity-60 mr-2">
+            Preview & Submit
+          </button>
           <button type="submit" :disabled="loading" class="px-6 py-2 bg-blue-700 text-white rounded font-bold hover:bg-blue-800 disabled:opacity-60">
             <span v-if="loading"><LoaderSpinner class="inline-block w-5 h-5 align-middle" /></span>
             <span v-else>Submit Riddle</span>
