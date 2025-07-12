@@ -10,7 +10,7 @@ WORKDIR /build
 COPY backend ./
 # Copy built frontend to backend resources
 COPY --from=frontend-build /frontend/dist ./src/main/resources/public
-RUN ./mvnw clean package -DskipTests
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
 # ---- Run Stage ----
 FROM eclipse-temurin:23-jre
