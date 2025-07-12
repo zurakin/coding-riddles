@@ -4,11 +4,12 @@ import Validation from '../components/Validation.vue';
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import type { Riddle } from '../model/riddle';
 
+
 const props = defineProps<{
-  riddle: Riddle,
+  riddle: Riddle | null,
 }>();
 
-const code = ref(props.riddle.code ?? '');
+const code = ref(props.riddle?.code ?? '');
 const terminal = ref('Run your code to see the output here');
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,

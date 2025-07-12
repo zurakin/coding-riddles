@@ -94,4 +94,7 @@ The primary goal of this project is to provide a platform where users can solve 
 ---
 
 ## License
-MIT
+
+This project is licensed under a custom license. You may use, copy, modify, and distribute this software for personal and non-commercial purposes only. Commercial use is strictly prohibited without prior written permission from the author.
+
+See the LICENSE file for full details.

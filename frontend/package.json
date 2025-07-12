@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.0.8",
     "axios": "^1.7.9",
     "highlight.js": "^11.8.0",
+    "pinia": "^3.0.3",
     "simple-code-editor": "^2.0.9",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1"

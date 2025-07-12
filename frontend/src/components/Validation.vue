@@ -7,7 +7,7 @@ import { LocalJavaScriptValidator } from '../Validator/LocalJavaScriptValidator'
 
 const props = defineProps({
     riddle: {
-        type: Object as () => Riddle | undefined,
+        type: Object as () => Riddle | null | undefined,
         required: false
     }, 
     code: 
