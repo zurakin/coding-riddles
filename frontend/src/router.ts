@@ -34,7 +34,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/preview-submit',
     name: 'PreviewBeforeSubmitPage',
-    component: () => PreviewBeforeSubmitPage
+    component: PreviewBeforeSubmitPage
   }
 ];
 
