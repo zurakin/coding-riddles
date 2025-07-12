@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "postbuild": "shx cp -r ../frontend/dist/* ../backend/src/main/resources/public/",
+    "copy-dist": "shx mkdir -p ../backend/src/main/resources/public && shx cp -r ../frontend/dist/. ../backend/src/main/resources/public/",
     "preview": "vite preview"
   },
   "dependencies": {
