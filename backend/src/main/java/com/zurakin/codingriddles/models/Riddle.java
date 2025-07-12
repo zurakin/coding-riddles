@@ -22,7 +22,9 @@ public class Riddle {
 
     @Lob
     private String description;
+    @Lob
     private String code;
+    @Lob
     private String validationCode;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
