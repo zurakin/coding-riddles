@@ -35,7 +35,7 @@ class RiddleControllerTest {
 
         when(riddleService.getAllRiddles()).thenReturn(riddles);
 
-        mockMvc.perform(get("/riddles"))
+        mockMvc.perform(get("/api/riddles"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].id").value(1))

@@ -1,3 +1,4 @@
+# Java/Maven
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -35,6 +36,9 @@ build/
 ### VS Code ###
 .vscode/
 
+# Node/Vite
+node_modules/
+dist/
 
-## Sensitive data
+# Sensitive data
 .env

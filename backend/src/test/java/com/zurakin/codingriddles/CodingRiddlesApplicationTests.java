@@ -15,6 +15,7 @@ class CodingRiddlesApplicationTests {
     @Autowired
     private RiddlesController riddleController;
 
+
     @Autowired
     private RiddlesService riddleService;
 
@@ -27,7 +28,7 @@ class CodingRiddlesApplicationTests {
     }
 
     @Test
-    void controllerBeanShouldBeLoaded() {
+    void riddlesControllerBeanShouldBeLoaded() {
         assertThat(riddleController).isNotNull();
     }
 
