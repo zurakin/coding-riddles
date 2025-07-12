@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -9,7 +8,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
-    outDir: path.resolve(__dirname, '../backend/src/main/resources/public'),
+    outDir: 'dist',
     emptyOutDir: true,
   },
   server: {

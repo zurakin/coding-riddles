@@ -85,7 +85,10 @@ The primary goal of this project is to provide a platform where users can solve 
 ### Manual Backend Deployment
 
 - The backend can still be deployed as a standalone JAR or Docker container.
-- The frontend can be built with `npm run build` and the output in `frontend/dist` will be automatically copied to the backend's `src/main/resources/public` directory.
+- The frontend can be built with `npm run build`. **You must then manually copy the output in `frontend/dist` to the backend's `src/main/resources/public` directory:**
+  ```sh
+  cp -r frontend/dist/* backend/src/main/resources/public/
+  ```
 - Rebuild and run the backend. The Spring Boot server will now serve the frontend at the root URL.
 
 ---
