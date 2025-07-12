@@ -1,29 +1,22 @@
 <script setup lang="ts">
 import RiddleView from '../components/RiddleView.vue';
-import { useRouter, useRoute } from 'vue-router';
-import { computed, ref } from 'vue';
-import type { Riddle } from '../model/riddle';
+
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useRiddlePreviewStore } from '../stores/riddlePreviewStore';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 import LoaderSpinner from '../components/LoaderSpinner.vue';
 
-const route = useRoute();
+
 const router = useRouter();
 const loading = ref(false);
 const message = ref('');
 const riddlesManagement = new RiddlesManagement();
 
-const riddle = computed<Riddle>(() => {
-  return {
-    id: -1, // Temporary id for preview
-    title: String(route.query.title ?? ''),
-    description: String(route.query.description ?? ''),
-    code: String(route.query.code ?? ''),
-    validationCode: String(route.query.validationCode ?? ''),
-    testCases: Array.isArray(route.query.testCases)
-      ? JSON.parse(route.query.testCases[0] || '[]')
-      : JSON.parse((route.query.testCases as string) || '[]'),
-  };
-});
+const riddlePreviewStore = useRiddlePreviewStore();
+const { riddle } = storeToRefs(riddlePreviewStore);
+
 
 function handleBack() {
   router.back();
@@ -33,6 +26,7 @@ async function handleSubmit() {
   loading.value = true;
   message.value = '';
   try {
+    if (!riddle.value) throw new Error('No riddle data to submit.');
     const result = await riddlesManagement.submitRiddle({
       title: riddle.value.title,
       description: riddle.value.description,
@@ -42,6 +36,7 @@ async function handleSubmit() {
     });
     const riddleId = result?.id ?? result?.riddleId ?? result?.data?.id;
     message.value = 'Riddle submitted successfully!';
+    riddlePreviewStore.clearRiddle();
     if (riddleId) {
       setTimeout(() => router.push({ name: 'Riddle', params: { id: riddleId } }), 1200);
     } else {

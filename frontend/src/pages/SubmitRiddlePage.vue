@@ -4,8 +4,11 @@ import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import LoaderSpinner from '../components/LoaderSpinner.vue';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 import type { TestCase } from '../model/riddle';
-import { useRouter } from 'vue-router';
 
+import { useRouter } from 'vue-router';
+import { useRiddlePreviewStore } from '../stores/riddlePreviewStore';
+
+import { onMounted } from 'vue';
 const title = ref('');
 const description = ref('');
 const code = ref('// Write your initial code here\nfunction sayHi(input) {\n  return "";\n}');
@@ -20,8 +23,8 @@ const previewing = ref(false);
 const router = useRouter();
 const riddlesManagement = new RiddlesManagement();
 
-function toTestCaseArray(): Omit<TestCase, 'id'>[] {
-  return testCases.value.map(tc => ({ input: tc.input, output: tc.output }));
+function toTestCaseArray(): TestCase[] {
+  return testCases.value.map((tc, idx) => ({ id: idx, input: tc.input, output: tc.output }));
 }
 
 function addTestCase() {
@@ -52,18 +55,34 @@ async function submitRiddle() {
 
 function handlePreview() {
   previewing.value = true;
-  const testCasesJson = JSON.stringify(toTestCaseArray());
+  const riddlePreviewStore = useRiddlePreviewStore();
+  riddlePreviewStore.setRiddle({
+    id: -1,
+    title: title.value,
+    description: description.value,
+    code: code.value,
+    validationCode: validationCode.value,
+    testCases: toTestCaseArray(),
+  });
   router.push({
     name: 'PreviewBeforeSubmitPage',
-    query: {
-      title: title.value,
-      description: description.value,
-      code: code.value,
-      validationCode: validationCode.value,
-      testCases: testCasesJson,
-    },
   });
 }
+
+// Restore form state from Pinia if available
+onMounted(() => {
+  const riddlePreviewStore = useRiddlePreviewStore();
+  if (riddlePreviewStore.riddle) {
+    const r = riddlePreviewStore.riddle;
+    title.value = r.title || '';
+    description.value = r.description || '';
+    code.value = r.code || '';
+    validationCode.value = r.validationCode || '';
+    testCases.value = Array.isArray(r.testCases) && r.testCases.length > 0
+      ? r.testCases.map(tc => ({ input: tc.input, output: tc.output }))
+      : [{ input: '', output: '' }];
+  }
+});
 </script>
 
 <template>

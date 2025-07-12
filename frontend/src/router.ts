@@ -1,3 +1,4 @@
+import DeleteRiddlePage from './pages/DeleteRiddlePage.vue';
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import RiddlePage from './pages/RiddlePage.vue';
 import About from './pages/About.vue';
@@ -6,6 +7,11 @@ import SubmitRiddlePage from './pages/SubmitRiddlePage.vue';
 import PreviewBeforeSubmitPage from './pages/PreviewBeforeSubmitPage.vue';
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: '/riddle/:id/delete',
+    name: 'DeleteRiddle',
+    component: DeleteRiddlePage
+  },
   {
     path: '/',
     name: 'Home',
@@ -34,7 +40,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/preview-submit',
     name: 'PreviewBeforeSubmitPage',
-    component: () => PreviewBeforeSubmitPage
+    component: PreviewBeforeSubmitPage
   }
 ];
 
