@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/riddles")
+@RequestMapping("/api/riddles")
 public class RiddlesController {
     private final RiddlesService service;
 
@@ -54,11 +54,6 @@ public class RiddlesController {
         Riddle savedRiddle = service.saveRiddle(riddle);
 
         return ResponseEntity.ok(savedRiddle);
-    }
-
-    @GetMapping(value = "/")
-    public String index() {
-        return "forward:/index.html";
     }
 
     @DeleteMapping("/{id}")
