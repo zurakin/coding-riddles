@@ -1,41 +1,46 @@
-package com.zurakin.codingriddles.controller;
+package com.zurakin.codingriddles;
 
 import com.zurakin.codingriddles.models.Riddle;
-import com.zurakin.codingriddles.service.RiddlesService;
+import com.zurakin.codingriddles.repository.RiddlesRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(RiddlesController.class)
-class RiddleControllerTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+public class RiddlesControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean
-    private RiddlesService riddleService;
+    @Autowired
+    private RiddlesRepository riddlesRepository;
 
-    @Test
-    void shouldReturnListOfRiddlesWithOnlyDesiredFields() throws Exception {
-        List<Riddle> riddles = Arrays.asList(new Riddle(1L, "Reverse a String",
+    @BeforeEach
+    void setup() {
+        riddlesRepository.deleteAll();
+        Riddle riddle = new Riddle(
+                null, // let JPA generate ID
+                "Reverse a String",
                 "Write a function to reverse a string.",
                 "def reverse_string(s):",
                 "reverse_string('hello') == 'olleh'",
-                null));
+                null
+        );
+        riddlesRepository.save(riddle);
+    }
 
-        when(riddleService.getAllRiddles()).thenReturn(riddles);
-
-        mockMvc.perform(get("/api/riddles"))
+    @Test
+    void shouldReturnRiddlesWithoutRestrictedFields() throws Exception {
+        mockMvc.perform(get("/api/riddles")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].id").value(1))

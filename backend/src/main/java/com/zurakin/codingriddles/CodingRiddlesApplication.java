@@ -10,7 +10,7 @@ public class CodingRiddlesApplication {
 
 
 	public static void main(String[] args) {
-		requireEnvVars("DB_USERNAME", "DB_PASSWORD");
+		requireEnvVars("DB_USERNAME", "DB_PASSWORD", "SPRING_DATASOURCE_URL", "SECRET_KEY");
 		SpringApplication.run(CodingRiddlesApplication.class, args);
 	}
 
