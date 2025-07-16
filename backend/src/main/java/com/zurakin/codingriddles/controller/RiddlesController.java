@@ -5,7 +5,9 @@ import com.zurakin.codingriddles.models.TestCase;
 import com.zurakin.codingriddles.models.dto.RiddleDTO;
 import com.zurakin.codingriddles.models.dto.RiddleRequestDTO;
 import com.zurakin.codingriddles.service.RiddlesService;
+import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/riddles")
 public class RiddlesController {
     private final RiddlesService service;
+
+    private final Logger logger = org.slf4j.LoggerFactory.getLogger(RiddlesController.class);
 
     public RiddlesController(RiddlesService service) {
         this.service = service;
@@ -57,7 +61,9 @@ public class RiddlesController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRiddle(@PathVariable Long id) {
+    public void deleteRiddle(@PathVariable Long id, Authentication auth)
+    {
+        logger.info("User: {} deleted Riddle: {}", auth.getName(), id);
         service.deleteRiddle(id);
     }
 }

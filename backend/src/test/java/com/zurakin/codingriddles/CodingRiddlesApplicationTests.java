@@ -2,6 +2,7 @@ package com.zurakin.codingriddles;
 
 import com.zurakin.codingriddles.controller.RiddlesController;
 import com.zurakin.codingriddles.repository.RiddlesRepository;
+import com.zurakin.codingriddles.service.JwtService;
 import com.zurakin.codingriddles.service.RiddlesService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = CodingRiddlesApplication.class)
+@SpringBootTest()
 class CodingRiddlesApplicationTests {
 
     @Autowired
@@ -21,6 +22,9 @@ class CodingRiddlesApplicationTests {
 
     @Autowired
     private RiddlesRepository riddleRepository;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Test
     void contextLoads() {
@@ -40,5 +44,10 @@ class CodingRiddlesApplicationTests {
     @Test
     void repositoryBeanShouldBeLoaded() {
         assertThat(riddleRepository).isNotNull();
+    }
+
+    @Test
+    void jwtServiceBeanShouldBeLoaded() {
+        assertThat(jwtService).isNotNull();
     }
 }
