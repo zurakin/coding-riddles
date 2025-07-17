@@ -37,10 +37,22 @@ const routes: RouteRecordRaw[] = [
     name: 'SubmitRiddle',
     component: SubmitRiddlePage
   },
+
   {
     path: '/preview-submit',
     name: 'PreviewBeforeSubmitPage',
     component: PreviewBeforeSubmitPage
+  },
+
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('./pages/Profile.vue')
+  },
+  {
+    path: '/authentication',
+    name: 'Auth',
+    component: () => import('./pages/Auth.vue')
   }
 ];
 

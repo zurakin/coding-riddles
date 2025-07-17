@@ -25,8 +25,9 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()              // ✅ allow register/login
+                        .requestMatchers("/auth/**").permitAll()              // allow register/login
                         .requestMatchers(HttpMethod.DELETE, "/api/riddles/**").authenticated()
+                        .requestMatchers("/user/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
