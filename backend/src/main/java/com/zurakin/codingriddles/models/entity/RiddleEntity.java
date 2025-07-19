@@ -1,4 +1,4 @@
-package com.zurakin.codingriddles.models;
+package com.zurakin.codingriddles.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Riddle {
+public class RiddleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +27,12 @@ public class Riddle {
     @Lob
     private String validationCode;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "riddle_id")
-    private List<TestCase> testCases;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "riddle")
+    @Setter
+    private List<TestCaseEntity> testCases;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    @Setter
+    private UserEntity author;
 }

@@ -1,0 +1,7 @@
+{
+  "title": "Sum Two Numbers",
+  "description": "Write a function that returns the sum of two numbers.",
+  "code": "def sum(a, b): return a + b",
+  "validationCode": "sum(2, 3) == 5",
+  "testCases": []
+}

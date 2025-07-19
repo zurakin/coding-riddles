@@ -8,6 +8,8 @@ import type { TestCase } from '../model/riddle';
 import { useRouter } from 'vue-router';
 import { useRiddlePreviewStore } from '../stores/riddlePreviewStore';
 
+import { UserManagement } from '../UserManagement/user_management';
+
 import { onMounted } from 'vue';
 const title = ref('');
 const description = ref('');
@@ -23,8 +25,10 @@ const previewing = ref(false);
 const router = useRouter();
 const riddlesManagement = new RiddlesManagement();
 
+const userManagement = new UserManagement();
+
 function toTestCaseArray(): TestCase[] {
-  return testCases.value.map((tc, idx) => ({ id: idx, input: tc.input, output: tc.output }));
+  return testCases.value.map((tc) => ({ input: tc.input, output: tc.output }));
 }
 
 function addTestCase() {
@@ -35,6 +39,14 @@ function removeTestCase(index: number) {
 }
 
 async function submitRiddle() {
+  // Check authentication before submitting
+  if (!userManagement.isAuthenticated()) {
+    message.value = 'You must login or signup to submit a riddle. Redirecting...';
+    setTimeout(() => {
+      router.push({ path: '/authentication' });
+    }, 3000);
+    return;
+  }
   loading.value = true;
   message.value = '';
   try {
@@ -71,6 +83,13 @@ function handlePreview() {
 
 // Restore form state from Pinia if available
 onMounted(() => {
+  if (!userManagement.isAuthenticated()) {
+    message.value = 'You must login or signup to submit a riddle. Redirecting...';
+    setTimeout(() => {
+      router.push({ path: '/authentication' });
+    }, 3000);
+    return;
+  }
   const riddlePreviewStore = useRiddlePreviewStore();
   if (riddlePreviewStore.riddle) {
     const r = riddlePreviewStore.riddle;
@@ -123,7 +142,11 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <div v-if="message" :class="message.includes('success') ? 'text-green-700' : 'text-red-700'">{{ message }}</div>
+        <div v-if="message"
+             :class="message.includes('success') ? 'text-green-700' : 'text-red-700 bg-red-100 border-2 border-red-400'"
+             class="text-2xl font-bold text-center py-6 rounded-xl my-6 shadow-lg">
+          {{ message }}
+        </div>
         <div class="flex justify-end">
           <button type="button" @click="handlePreview" :disabled="loading" class="px-6 py-2 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 disabled:opacity-60 mr-2">
             Preview & Submit

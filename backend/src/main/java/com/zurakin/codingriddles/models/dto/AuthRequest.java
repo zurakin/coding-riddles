@@ -1,11 +1,9 @@
 package com.zurakin.codingriddles.models.dto;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class AuthRequest {
     private String username;
     private String password;

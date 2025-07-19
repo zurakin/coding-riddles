@@ -1,6 +1,8 @@
 export class UserManagement {
+    isAuthenticated(): boolean {
+        return !!localStorage.getItem('token');
+    }
     async register(username: string, password: string) {
-        console.log("Attempting to register with:", JSON.stringify({ username, password }));
         const response = await fetch('/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

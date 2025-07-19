@@ -1,5 +1,5 @@
-package com.zurakin.codingriddles.models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.zurakin.codingriddles.models.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,15 +9,16 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestCase {
+@Setter
+@Getter
+public class TestCaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String input;
     private String output;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "riddle_id")
-    @JsonIgnore
-    private Riddle riddle;
+    private RiddleEntity riddle;
 }

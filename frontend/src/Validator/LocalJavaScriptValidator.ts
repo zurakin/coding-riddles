@@ -4,9 +4,9 @@ import type { Validator } from './Validator';
 import type { Riddle } from '../model/riddle';
 
 export class LocalJavaScriptValidator implements Validator {
-    validateTestCase(code: string, riddle: Riddle, testCaseId: number): { status: boolean, message: string } {
+    validateTestCase(code: string, riddle: Riddle, testCaseIdx: number): { status: boolean, message: string } {
         if (riddle && riddle.validationCode && riddle.testCases && code) {
-            const testCase = riddle.testCases.find((tc: { id: number }) => tc.id === testCaseId);
+            const testCase = riddle.testCases[testCaseIdx];
             if (testCase) {
                 try {
                     const fnBody = `${code}\nreturn (input) => { ${riddle.validationCode}; }`;
@@ -18,25 +18,25 @@ export class LocalJavaScriptValidator implements Validator {
                     if (passed) {
                         return {
                             status: true,
-                            message: `Test Case ${testCaseId}: [passed]`
+                            message: `Test Case ${testCaseIdx + 1}: [passed]`
                         };
                     } else {
                         return {
                             status: false,
-                            message: `Test Case ${testCaseId}: [failed]\nRiddle Input    : "${String(testCase.input)}"\nUser Output     : "${String(userOutput)}"\nExpected Output : "${String(testCase.output)}"`
+                            message: `Test Case ${testCaseIdx + 1}: [failed]\nRiddle Input    : "${String(testCase.input)}"\nUser Output     : "${String(userOutput)}"\nExpected Output : "${String(testCase.output)}"`
                         };
                     }
                 } catch (error: any) {
                     return {
                         status: false,
-                        message: `Test Case ${testCaseId}: [Execution Error] - ${error instanceof Error ? error.message : String(error)}`
+                        message: `Test Case ${testCaseIdx + 1}: [Execution Error] - ${error instanceof Error ? error.message : String(error)}`
                     };
                 }
             }
         }
         return {
             status: false,
-            message: `Test Case ${testCaseId}: [failed] - Test case, validation code, or user code missing`
+            message: `Test Case ${testCaseIdx + 1}: [failed] - Test case, validation code, or user code missing`
         };
     }
 }

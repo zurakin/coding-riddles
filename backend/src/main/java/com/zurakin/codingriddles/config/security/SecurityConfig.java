@@ -1,6 +1,5 @@
 package com.zurakin.codingriddles.config.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -27,6 +26,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()              // allow register/login
                         .requestMatchers(HttpMethod.DELETE, "/api/riddles/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/riddles").authenticated()
                         .requestMatchers("/user/**").authenticated()
                         .anyRequest().permitAll()
                 )
