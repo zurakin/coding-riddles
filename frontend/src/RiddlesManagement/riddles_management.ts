@@ -5,15 +5,25 @@ export class RiddlesManagement {
         try {
             const response = await fetch(`/api/riddles/${id}`);
             const data = await response.json();
-            return data;;
+            console.log('Fetched riddle:', data);
+            return data;
         } catch (error) {
             console.error('Error fetching riddle:', error);
         }
     }
 
     async deleteRiddle(id: number) {
+        const token = localStorage.getItem('jwt');
+        if (!token) {
+            throw new Error('User must be authenticated to delete a riddle');
+        }
         try {
-            await fetch(`/api/riddles/${id}`, { method: 'DELETE' });
+            await fetch(`/api/riddles/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
         } catch (error) {
             console.error('Error deleting riddle:', error);
         }
@@ -30,10 +40,17 @@ export class RiddlesManagement {
     }
 
     async submitRiddle(riddle: Omit<Riddle, 'id'>) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('User must be authenticated to submit a riddle');
+        }
         try {
             const response = await fetch('/api/riddles', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(riddle)
             });
             if (!response.ok) {

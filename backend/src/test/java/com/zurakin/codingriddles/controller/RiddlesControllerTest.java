@@ -1,6 +1,6 @@
-package com.zurakin.codingriddles;
+package com.zurakin.codingriddles.controller;
 
-import com.zurakin.codingriddles.models.Riddle;
+import com.zurakin.codingriddles.models.entity.RiddleEntity;
 import com.zurakin.codingriddles.repository.RiddlesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,19 +26,20 @@ public class RiddlesControllerTest {
     @BeforeEach
     void setup() {
         riddlesRepository.deleteAll();
-        Riddle riddle = new Riddle(
+        RiddleEntity riddleEntity = new RiddleEntity(
                 null, // let JPA generate ID
                 "Reverse a String",
                 "Write a function to reverse a string.",
                 "def reverse_string(s):",
                 "reverse_string('hello') == 'olleh'",
+                null, 
                 null
         );
-        riddlesRepository.save(riddle);
+        riddlesRepository.save(riddleEntity);
     }
 
     @Test
-    void shouldReturnRiddlesWithoutRestrictedFields() throws Exception {
+    void shouldReturnRiddlesDtoFieldsOnly() throws Exception {
         mockMvc.perform(get("/api/riddles")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

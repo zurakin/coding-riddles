@@ -1,9 +1,12 @@
 package com.zurakin.codingriddles.controller;
 
-import com.zurakin.codingriddles.models.Riddle;
-import com.zurakin.codingriddles.models.TestCase;
-import com.zurakin.codingriddles.models.dto.RiddleDTO;
-import com.zurakin.codingriddles.models.dto.RiddleRequestDTO;
+import com.zurakin.codingriddles.models.domain.User;
+import com.zurakin.codingriddles.models.dto.RiddleDetailsDto;
+import com.zurakin.codingriddles.models.dto.RiddleDto;
+import com.zurakin.codingriddles.models.dto.RiddleRequestDto;
+import com.zurakin.codingriddles.models.mapper.RiddleMapper;
+import com.zurakin.codingriddles.models.mapper.UserMapper;
+import com.zurakin.codingriddles.models.entity.RiddleEntity;
 import com.zurakin.codingriddles.service.RiddlesService;
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/riddles")
 public class RiddlesController {
     private final RiddlesService service;
+    private final RiddleMapper riddleMapper = RiddleMapper.INSTANCE;
+
+    private final UserMapper userMapper = UserMapper.INSTANCE;
 
     private final Logger logger = org.slf4j.LoggerFactory.getLogger(RiddlesController.class);
 
@@ -26,44 +32,45 @@ public class RiddlesController {
     }
 
     @GetMapping
-    public List<RiddleDTO> listRiddles() {
+    public List<RiddleDetailsDto> listRiddles() {
         return service.getAllRiddles().stream()
-                .map(riddle -> new RiddleDTO(riddle.getId(), riddle.getTitle(), riddle.getDescription()))
+                .map(riddleMapper::toDetailsDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Riddle getRiddleById(@PathVariable Long id) {
-        return service.getRiddleById(id);
+    public ResponseEntity<RiddleDto> getRiddleById(@PathVariable Long id) {
+        RiddleEntity entity = service.getRiddleByIdWithTestCases(id);
+        if (entity == null) {
+            return ResponseEntity.status(404).body(null);
+        }
+        return ResponseEntity.ok(riddleMapper.toDto(entity));
     }
 
-
     @PostMapping
-    public ResponseEntity<Riddle> createRiddle(@RequestBody RiddleRequestDTO riddleDTO) {
+    public ResponseEntity<RiddleDto> createRiddle(@RequestBody RiddleRequestDto riddleDTO, Authentication auth) {
         if (riddleDTO == null) {
             return ResponseEntity.badRequest().body(null);
         }
-        Riddle riddle = new Riddle();
-        riddle.setTitle(riddleDTO.getTitle());
-        riddle.setDescription(riddleDTO.getDescription());
-        riddle.setCode(riddleDTO.getCode());
-        riddle.setValidationCode(riddleDTO.getValidationCode());
-
-        List<TestCase> testCases = riddleDTO.getTestCases().stream()
-                .map(dto -> new TestCase(null, dto.getInput(), dto.getOutput(), riddle))
-                .collect(Collectors.toList());
-
-        riddle.setTestCases(testCases);
-
-        Riddle savedRiddle = service.saveRiddle(riddle);
-
-        return ResponseEntity.ok(savedRiddle);
+        RiddleEntity riddleEntity = riddleMapper.toEntity(riddleDTO);
+        if (auth != null && auth.getPrincipal() instanceof User user) {
+            riddleEntity.setAuthor(userMapper.toEntity(user));
+        }
+        RiddleEntity savedRiddleEntity = service.saveRiddle(riddleEntity);
+        RiddleDto riddleDto = riddleMapper.toDto(savedRiddleEntity);
+        return ResponseEntity.ok(riddleDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRiddle(@PathVariable Long id, Authentication auth)
-    {
-        logger.info("User: {} deleted Riddle: {}", auth.getName(), id);
-        service.deleteRiddle(id);
+    public void deleteRiddle(@PathVariable Long id, Authentication auth) {
+        String currentUsername = auth != null ? auth.getName() : null;
+        try {
+            service.deleteRiddleAuthorized(id, currentUsername);
+            logger.info("User: {} deleted Riddle: {}", currentUsername, id);
+        } catch (RiddlesService.ForbiddenException e) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (RiddlesService.NotFoundException e) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }

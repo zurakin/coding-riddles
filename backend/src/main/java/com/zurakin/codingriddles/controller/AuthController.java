@@ -1,8 +1,10 @@
 package com.zurakin.codingriddles.controller;
 
-import com.zurakin.codingriddles.models.User;
+import com.zurakin.codingriddles.models.domain.User;
 import com.zurakin.codingriddles.models.dto.AuthRequest;
-import com.zurakin.codingriddles.models.dto.AuthResponse;
+import com.zurakin.codingriddles.models.dto.AuthResponseDto;
+import com.zurakin.codingriddles.models.mapper.UserMapper;
+import com.zurakin.codingriddles.models.entity.UserEntity;
 import com.zurakin.codingriddles.repository.UserRepository;
 import com.zurakin.codingriddles.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
+    private final UserMapper userMapper = UserMapper.INSTANCE;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
@@ -38,20 +42,22 @@ public class AuthController {
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        userRepository.save(user);
+        userRepository.save(userMapper.toEntity(user));
         return ResponseEntity.ok("User registered");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
+        UserEntity userEntity = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        User user = UserMapper.INSTANCE.toDomain(userEntity);
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
         String jwt = jwtService.generateToken(user);
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        return ResponseEntity.ok(new AuthResponseDto(jwt));
     }
 }

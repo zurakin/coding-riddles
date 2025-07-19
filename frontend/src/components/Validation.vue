@@ -36,8 +36,8 @@ const handleTestCaseClick = (testCaseId: number) => {
 
 function resetValidationStatus() {
     if (props.riddle && props.riddle.testCases) {
-        props.riddle.testCases.forEach(testCase => {
-            statusPerTestCase.value[testCase.id] = 'default';
+        props.riddle.testCases.forEach((_, idx) => {
+            statusPerTestCase.value[idx] = 'default';
         });
     }
 }
@@ -55,24 +55,27 @@ watch(() => props.riddle, resetValidationStatus);
         </div>
         <div v-else-if="riddle">
             <h2 class="text-2xl font-bold text-blue-900 mb-2 text-center">{{ riddle.title }}</h2>
+            <div v-if="riddle.author" class="text-base text-blue-700 mb-2 text-center">
+                <span class="font-semibold">Author:</span> {{ riddle.author.username }}
+            </div>
             <div class="mb-4 text-center max-h-[40vh] overflow-y-auto bg-white/80 rounded-lg p-4 relative scrollable-section">
                 <p class="text-gray-700 italic mt-2 whitespace-pre-line">{{ riddle.description }}</p>
             </div>
             <div class="scroll-fade-bottom"></div>
             <h3 class="text-2xl font-semibold text-blue-700 mt-6 mb-2 text-center">Test Cases</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2">
-                <button v-for="(testCase, index) in riddle.testCases" 
-                        :key="testCase.id" 
+                <button v-for="(_, index) in riddle.testCases" 
+                        :key="index" 
                         :class="{
-                            'bg-blue-500 text-white': statusPerTestCase[testCase.id] === 'default',
-                            'bg-gray-500 text-white': statusPerTestCase[testCase.id] === 'running',
-                            'bg-green-600 hover:bg-green-700 text-white': statusPerTestCase[testCase.id] === 'passed',
-                            'bg-red-700 hover:bg-red-900 text-white': statusPerTestCase[testCase.id] === 'failed'
+                            'bg-blue-500 text-white': statusPerTestCase[index] === 'default',
+                            'bg-gray-500 text-white': statusPerTestCase[index] === 'running',
+                            'bg-green-600 hover:bg-green-700 text-white': statusPerTestCase[index] === 'passed',
+                            'bg-red-700 hover:bg-red-900 text-white': statusPerTestCase[index] === 'failed'
                         }"
                         class="font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-2"
-                        @click="handleTestCaseClick(testCase.id)">
-                    <span v-if="statusPerTestCase[testCase.id] !== 'running'">Test {{ index + 1 }}</span>
-                    <LoaderSpinner v-if="statusPerTestCase[testCase.id] === 'running'" />
+                        @click="handleTestCaseClick(index)">
+                    <span v-if="statusPerTestCase[index] !== 'running'">Test {{ index + 1 }}</span>
+                    <LoaderSpinner v-if="statusPerTestCase[index] === 'running'" />
                 </button>
             </div>
         </div>

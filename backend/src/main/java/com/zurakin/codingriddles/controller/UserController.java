@@ -2,6 +2,7 @@ package com.zurakin.codingriddles.controller;
 
 
 import com.zurakin.codingriddles.models.dto.UserProfileDto;
+import com.zurakin.codingriddles.models.mapper.UserMapper;
 import com.zurakin.codingriddles.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    private final UserMapper userMapper = UserMapper.INSTANCE;
+
     @GetMapping
     public UserProfileDto getUserProfile(Authentication auth) {
         var user = userRepository.findByUsername(auth.getName());
@@ -26,9 +29,6 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        UserProfileDto userProfile = new UserProfileDto();
-        userProfile.setUsername(user.get().getUsername());
-
-        return userProfile;
+        return userMapper.toDto(user.get());
     }
 }
