@@ -1,0 +1,28 @@
+{
+    "id": 1,
+    "title": "Reverse a String",
+    "description": "Write a function to reverse a given string.",
+    "code": "function reverseString(s) {\n\treturn \"\";\n}",
+    "validationCode": "return reverseString(input);",
+    "testCases": [
+        {
+            "input": "hello",
+            "output": "olleh"
+        },
+        {
+            "input": "world",
+            "output": "dlrow"
+        },
+        {
+            "input": "",
+            "output": ""
+        },
+        {
+            "input": "Coding Riddles",
+            "output": "selddiR gnidoC"
+        }
+    ],
+    "author": {
+        "username": "zura"
+    }
+}

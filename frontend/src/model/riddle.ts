@@ -6,10 +6,14 @@ export interface Riddle {
   testCases: TestCase[];
   validationCode: string;
   functionName?: string;
+  author?: Author;
 }
 
 export interface TestCase {
-  id: number;
   input: string;
   output: string;
+}
+
+export interface Author {
+  username: string;
 }

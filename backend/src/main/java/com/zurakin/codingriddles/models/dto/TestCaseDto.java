@@ -1,11 +1,9 @@
 package com.zurakin.codingriddles.models.dto;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class TestCaseDTO {
+public class TestCaseDto {
     private String input;
     private String output;
 }

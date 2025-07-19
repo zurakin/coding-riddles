@@ -1,6 +1,6 @@
 package com.zurakin.codingriddles.service;
 
-import com.zurakin.codingriddles.models.Riddle;
+import com.zurakin.codingriddles.models.entity.RiddleEntity;
 import com.zurakin.codingriddles.repository.RiddlesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,40 +27,40 @@ class RiddlesServiceTest {
     @InjectMocks
     private RiddlesService riddleService;
 
-    private Riddle riddle;
+    private RiddleEntity riddleEntity;
 
     @BeforeEach
     void setUp() {
-        riddle = new Riddle(1L, "Reverse a String", "Write a function to reverse a string.", "def reverse_string(s):", "reverse_string('hello') == 'olleh'", null);
+        riddleEntity = new RiddleEntity(1L, "Reverse a String", "Write a function to reverse a string.", "def reverse_string(s):", "reverse_string('hello') == 'olleh'", null, null);
     }
 
     @Test
     void shouldReturnAllRiddles() {
-        when(riddleRepository.findAll()).thenReturn(Arrays.asList(riddle));
+        when(riddleRepository.findAll()).thenReturn(Arrays.asList(riddleEntity));
 
-        List<Riddle> riddles = riddleService.getAllRiddles();
+        List<RiddleEntity> riddleEntities = riddleService.getAllRiddles();
 
-        assertEquals(1, riddles.size());
-        assertEquals("Reverse a String", riddles.get(0).getTitle());
+        assertEquals(1, riddleEntities.size());
+        assertEquals("Reverse a String", riddleEntities.get(0).getTitle());
     }
 
     @Test
     void shouldReturnRiddleById() {
-        when(riddleRepository.findById(1L)).thenReturn(Optional.of(riddle));
+        when(riddleRepository.findById(1L)).thenReturn(Optional.of(riddleEntity));
 
-        Riddle foundRiddle = riddleService.getRiddleById(1L);
+        RiddleEntity foundRiddleEntity = riddleService.getRiddleById(1L);
 
-        assertNotNull(foundRiddle);
-        assertEquals("Reverse a String", foundRiddle.getTitle());
+        assertNotNull(foundRiddleEntity);
+        assertEquals("Reverse a String", foundRiddleEntity.getTitle());
     }
 
     @Test
     void shouldSaveRiddle() {
-        when(riddleRepository.save(any(Riddle.class))).thenReturn(riddle);
+        when(riddleRepository.save(any(RiddleEntity.class))).thenReturn(riddleEntity);
 
-        Riddle savedRiddle = riddleService.saveRiddle(riddle);
+        RiddleEntity savedRiddleEntity = riddleService.saveRiddle(riddleEntity);
 
-        assertNotNull(savedRiddle);
-        assertEquals("Reverse a String", savedRiddle.getTitle());
+        assertNotNull(savedRiddleEntity);
+        assertEquals("Reverse a String", savedRiddleEntity.getTitle());
     }
 }

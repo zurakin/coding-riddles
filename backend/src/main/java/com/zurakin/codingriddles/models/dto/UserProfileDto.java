@@ -1,11 +1,12 @@
 package com.zurakin.codingriddles.models.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @NoArgsConstructor
 public class UserProfileDto {
-    @Setter
-    @Getter
     private String username;
 }

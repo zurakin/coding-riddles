@@ -1,0 +1,6 @@
+{
+  "timestamp" : "$JSON_IGNORE",
+  "status" : 403,
+  "error" : "Forbidden",
+  "path" : "/api/riddles/1"
+}
