@@ -9,12 +9,18 @@ Feature: FMEA
     When I submit a new riddle using the json "riddle1.json"
     Then the status should be 200
     Then the response should match the json "submit_riddle1_response.json"
+    When I submit a new riddle using the json "riddle2.json"
+    Then the status should be 200
+    Then the response should match the json "submit_riddle2_response.json"
     When I list riddles
     Then the status should be 200
-    Then the response should match the json "list_riddles1_response.json"
+    Then the response should match the json "list_riddles2_response.json"
     When I get the riddle with id 1
     Then the status should be 200
     Then the response should match the json "get_riddle_1_response.json"
+    When I get the riddle with id 2
+    Then the status should be 200
+    Then the response should match the json "get_riddle_2_response.json"
     When I sign out
     When I try to delete the riddle with id 1
     Then the status should be 403
@@ -29,4 +35,13 @@ Feature: FMEA
     When I try to delete the riddle with id 1
     Then the status should be 200
     When I get the riddle with id 1
+    Then the status should be 404
+    When I get the riddle with id 2
+    Then the status should be 200
+    When I sign up with username "moderator" and password "moderator"
+    When the user "moderator" is given the role "MODERATOR"
+    When I log in using username "moderator" and password "moderator"
+    When I try to delete the riddle with id 2
+    Then the status should be 200
+    When I get the riddle with id 2
     Then the status should be 404
