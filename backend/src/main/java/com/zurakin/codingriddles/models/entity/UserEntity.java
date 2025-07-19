@@ -21,6 +21,9 @@ public class UserEntity {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private RoleEntity role = RoleEntity.USER;
+
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RiddleEntity> riddles = new ArrayList<>();
 }

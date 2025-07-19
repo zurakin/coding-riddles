@@ -1,7 +1,7 @@
 package com.zurakin.codingriddles.service;
 
-import com.zurakin.codingriddles.models.mapper.UserMapper;
 import com.zurakin.codingriddles.models.entity.UserEntity;
+import com.zurakin.codingriddles.models.mapper.UserMapper;
 import com.zurakin.codingriddles.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

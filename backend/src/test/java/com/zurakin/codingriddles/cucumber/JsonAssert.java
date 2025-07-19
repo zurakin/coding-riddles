@@ -2,7 +2,8 @@ package com.zurakin.codingriddles.cucumber;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.*;
+
+import java.util.Iterator;
 
 public class JsonAssert {
     public static void assertJsonEquals(String actual, String expected) throws Exception {

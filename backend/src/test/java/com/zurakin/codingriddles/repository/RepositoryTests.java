@@ -1,8 +1,8 @@
 package com.zurakin.codingriddles.repository;
 
-import com.zurakin.codingriddles.models.entity.UserEntity;
 import com.zurakin.codingriddles.models.entity.RiddleEntity;
 import com.zurakin.codingriddles.models.entity.TestCaseEntity;
+import com.zurakin.codingriddles.models.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -3,15 +3,26 @@ package com.zurakin.codingriddles.cucumber;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cucumber.java.en.*;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class Steps {
+    @Autowired
+    private com.zurakin.codingriddles.repository.UserRepository userRepository;
+
+    @When("the user {string} is given the role {string}")
+    public void the_user_is_given_the_role(String username, String role) {
+        com.zurakin.codingriddles.models.entity.UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found: " + username));
+        user.setRole(com.zurakin.codingriddles.models.entity.RoleEntity.valueOf(role));
+        userRepository.save(user);
+    }
     @When("I try to delete the riddle with id {int}")
     public void i_try_to_delete_the_riddle_with_id(int id) {
         String url = "/api/riddles/" + id;

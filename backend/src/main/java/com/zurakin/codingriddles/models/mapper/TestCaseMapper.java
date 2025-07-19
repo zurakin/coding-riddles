@@ -1,9 +1,9 @@
 package com.zurakin.codingriddles.models.mapper;
 
+import com.zurakin.codingriddles.models.dto.TestCaseDto;
+import com.zurakin.codingriddles.models.entity.TestCaseEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import com.zurakin.codingriddles.models.entity.TestCaseEntity;
-import com.zurakin.codingriddles.models.dto.TestCaseDto;
 
 @Mapper()
 public interface TestCaseMapper {

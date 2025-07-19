@@ -1,7 +1,10 @@
 package com.zurakin.codingriddles.service;
 
 import com.zurakin.codingriddles.models.entity.RiddleEntity;
+import com.zurakin.codingriddles.models.entity.UserEntity;
 import com.zurakin.codingriddles.repository.RiddlesRepository;
+import com.zurakin.codingriddles.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,16 +19,29 @@ public class RiddlesService {
         public NotFoundException(String message) { super(message); }
     }
 
+    @Autowired
+    private UserRepository userRepository;
+
     public void deleteRiddleAuthorized(Long id, String currentUsername) {
         RiddleEntity riddle = getRiddleByIdWithTestCases(id);
         if (riddle == null) {
             throw new NotFoundException("Riddle not found");
         }
-        String authorUsername = riddle.getAuthor() != null ? riddle.getAuthor().getUsername() : null;
-        if (currentUsername == null || !currentUsername.equals(authorUsername)) {
+        if (currentUsername == null) {
             throw new ForbiddenException("You are not allowed to delete this riddle");
         }
-        deleteRiddle(id);
+        // Author can delete
+        if (riddle.getAuthor() != null && currentUsername.equals(riddle.getAuthor().getUsername())) {
+            deleteRiddle(id);
+            return;
+        }
+        // Check current user's role
+        UserEntity currentUser = userRepository.findByUsername(currentUsername).orElse(null);
+        if (currentUser != null && (currentUser.getRole() == com.zurakin.codingriddles.models.entity.RoleEntity.MODERATOR || currentUser.getRole() == com.zurakin.codingriddles.models.entity.RoleEntity.ADMIN)) {
+            deleteRiddle(id);
+            return;
+        }
+        throw new ForbiddenException("You are not allowed to delete this riddle");
     }
     private final RiddlesRepository repository;
 
