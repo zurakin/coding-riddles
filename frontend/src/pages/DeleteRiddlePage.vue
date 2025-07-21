@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 
-const router = useRouter();
 const route = useRoute();
 const riddlesManagement = new RiddlesManagement();
 
