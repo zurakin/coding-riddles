@@ -34,7 +34,16 @@ export class UserManagement {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) {
-            throw new Error('Failed to fetch user profile');
+            let message = 'Failed to fetch user profile';
+            try {
+                message = await response.text() || message;
+            } catch {}
+            throw {
+                name: 'ApiError',
+                message,
+                status: response.status,
+                response
+            };
         }
         return await response.json();
     }

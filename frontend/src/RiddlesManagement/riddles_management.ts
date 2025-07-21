@@ -5,7 +5,6 @@ export class RiddlesManagement {
         try {
             const response = await fetch(`/api/riddles/${id}`);
             const data = await response.json();
-            console.log('Fetched riddle:', data);
             return data;
         } catch (error) {
             console.error('Error fetching riddle:', error);
@@ -13,7 +12,7 @@ export class RiddlesManagement {
     }
 
     async deleteRiddle(id: number) {
-        const token = localStorage.getItem('jwt');
+        const token = localStorage.getItem('token');
         if (!token) {
             throw new Error('User must be authenticated to delete a riddle');
         }
