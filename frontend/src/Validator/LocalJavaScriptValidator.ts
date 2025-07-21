@@ -12,7 +12,6 @@ export class LocalJavaScriptValidator implements Validator {
                     const fnBody = `${code}\nreturn (input) => { ${riddle.validationCode}; }`;
                     // eslint-disable-next-line no-new-func
                     const evaluateInput = new Function('input', fnBody)();
-                    console.log(fnBody);
                     const userOutput = evaluateInput(testCase.input);
                     const passed = userOutput == testCase.output;
                     if (passed) {
