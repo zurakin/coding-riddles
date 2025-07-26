@@ -7,6 +7,7 @@ export interface Riddle {
   validationCode: string;
   functionName?: string;
   author?: Author;
+  createdAt?: string;
 }
 
 export interface TestCase {
