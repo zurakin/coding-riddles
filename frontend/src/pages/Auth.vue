@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[90%] max-w-xl mx-auto mt-10 bg-white rounded shadow p-8 overflow-y-auto h-[90%] min-h-0 ">
+    <div class="w-[90%] max-w-xl mx-auto mt-10 bg-white rounded shadow p-8 overflow-y-auto h-[100%] min-h-0 ">
         <div class="flex flex-col gap-8">
           <!-- Login Form -->
           <form @submit.prevent="onSubmit" class="flex-1 bg-slate-50 rounded-lg shadow p-6">
@@ -15,7 +15,7 @@
             <button type="submit" class="btn btn-primary w-full" :disabled="loading">Login</button>
             <div v-if="error && !signupError" class="text-red-600 mt-2 text-center">{{ error }}</div>
           </form>
-          <h3 class="text-xl font-bold mb-4 text-blue-700 text-center">Or</h3>
+          <h3 class="text-xl font-bold mb-3 text-blue-700 text-center">Or</h3>
           <!-- Signup Form -->
           <form @submit.prevent="onSignup" class="flex-1 bg-slate-50 rounded-lg shadow p-6">
             <h3 class="text-xl font-bold mb-4 text-blue-700 text-center">Sign Up</h3>

@@ -105,7 +105,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="!previewing" class="flex flex-col items-center w-full py-8 bg-gradient-to-br from-blue-50 to-slate-100 overflow-y-auto h-[90%] min-h-0 pb-16">
+  <div v-if="!previewing" class="flex flex-col items-center w-full py-8 bg-gradient-to-br from-blue-50 to-slate-100 overflow-y-auto h-[100%] min-h-0 pb-16">
     <div class="w-full max-w-[1600px] flex-1 flex flex-col bg-white rounded-2xl shadow-xl border border-blue-200 p-8">
       <h2 class="text-3xl font-extrabold text-blue-700 mb-6 text-center">Submit a New Riddle</h2>
       <form @submit.prevent="submitRiddle" class="space-y-6 flex-1 flex flex-col">
