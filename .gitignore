@@ -42,3 +42,5 @@ dist/
 
 # Sensitive data
 .env
+
+dev-tools/riddles_backup
