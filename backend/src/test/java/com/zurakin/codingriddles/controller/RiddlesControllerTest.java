@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +36,8 @@ public class RiddlesControllerTest {
                 "def reverse_string(s):",
                 "reverse_string('hello') == 'olleh'",
                 null, 
-                null
+                null,
+                LocalDateTime.of(2001, 1, 4, 12, 0, 0)
         );
         riddlesRepository.save(riddleEntity);
     }

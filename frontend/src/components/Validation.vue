@@ -4,6 +4,7 @@ import { ref, type Ref, watch, onMounted, defineProps } from 'vue';
 import type { Riddle } from '../model/riddle';
 import LoaderSpinner from './LoaderSpinner.vue';
 import { LocalJavaScriptValidator } from '../Validator/LocalJavaScriptValidator';
+import { timeAgo } from '../utils/timeAgo';
 
 const props = defineProps({
     riddle: {
@@ -72,8 +73,13 @@ watch(() => props.riddle, resetValidationStatus);
         </div>
         <div v-else-if="riddle">
             <h2 class="text-2xl font-bold text-blue-900 mb-2 text-center">{{ riddle.title }}</h2>
-            <div v-if="riddle.author" class="text-base text-blue-700 mb-2 text-center">
-                <span class="font-semibold">Author:</span> {{ riddle.author.username }}
+            <div v-if="riddle.author || riddle.createdAt" class="text-base text-blue-700 mb-2 text-center flex flex-col items-center gap-1">
+                <div v-if="riddle.author">
+                  <span class="font-semibold">Author:</span> {{ riddle.author.username }}
+                </div>
+                <div v-if="riddle.createdAt">
+                  <span class="font-semibold">Created:</span> {{ timeAgo(riddle.createdAt) }}
+                </div>
             </div>
             <div class="mb-4 text-center max-h-[40vh] overflow-y-auto bg-white/80 rounded-lg p-4 relative scrollable-section">
                 <p class="text-gray-700 italic mt-2 whitespace-pre-line">{{ riddle.description }}</p>

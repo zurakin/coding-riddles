@@ -2,6 +2,7 @@
     {
         "id": 1,
         "title": "Reverse a String",
-        "description": "Write a function to reverse a given string."
+        "description": "Write a function to reverse a given string.",
+        "createdAt": "$JSON_IGNORE"
     }
 ]
