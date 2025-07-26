@@ -19,7 +19,24 @@ const props = defineProps({
 const emit = defineEmits(["test-executed"]);
 const loading: Ref<boolean> = ref<boolean>(false);
 const statusPerTestCase: Ref = ref<{ [key: string]: 'default' | 'passed' | 'failed' | 'running' }>({});
+
 const validator = new LocalJavaScriptValidator();
+const runningAll = ref(false);
+const allResults = ref<{ index: number, status: 'passed' | 'failed', message: string }[] | null>(null);
+
+async function runAllTestCases() {
+    if (!props.riddle || !props.code || !props.riddle.testCases) return;
+    runningAll.value = true;
+    allResults.value = null;
+    const results: { index: number, status: 'passed' | 'failed', message: string }[] = [];
+    for (let i = 0; i < props.riddle.testCases.length; i++) {
+        const result = validator.validateTestCase(props.code, props.riddle, i);
+        results.push({ index: i, status: result.status ? 'passed' : 'failed', message: result.message });
+        statusPerTestCase.value[i] = result.status ? 'passed' : 'failed';
+    }
+    allResults.value = results;
+    runningAll.value = false;
+}
 
 const handleTestCaseClick = (testCaseId: number) => {
     statusPerTestCase.value[testCaseId] = 'running';
@@ -63,6 +80,36 @@ watch(() => props.riddle, resetValidationStatus);
             </div>
             <div class="scroll-fade-bottom"></div>
             <h3 class="text-2xl font-semibold text-blue-700 mt-6 mb-2 text-center">Test Cases</h3>
+            <div class="flex flex-col items-center gap-2 mb-2">
+                <button
+                  class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 font-semibold mb-2"
+                  @click="runAllTestCases"
+                  :disabled="runningAll"
+                >
+                  {{ runningAll ? 'Running...' : 'Run All Test Cases' }}
+                </button>
+                <div v-if="allResults" class="w-full max-w-xl mt-2">
+                  <table class="w-full border text-sm">
+                    <thead>
+                      <tr class="bg-slate-100">
+                        <th class="p-2 border">Test #</th>
+                        <th class="p-2 border">Result</th>
+                        <th class="p-2 border">Message</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="result in allResults" :key="result.index">
+                        <td class="p-2 border">{{ result.index + 1 }}</td>
+                        <td class="p-2 border">
+                          <span v-if="result.status === 'passed'" class="text-green-600 font-bold">✔</span>
+                          <span v-else class="text-red-600 font-bold">✘</span>
+                        </td>
+                        <td class="p-2 border">{{ result.message }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2">
                 <button v-for="(_, index) in riddle.testCases" 
                         :key="index" 
