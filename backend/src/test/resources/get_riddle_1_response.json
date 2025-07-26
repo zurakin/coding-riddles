@@ -24,5 +24,6 @@
     ],
     "author": {
         "username": "zura"
-    }
+    },
+    "createdAt": "$JSON_IGNORE"
 }

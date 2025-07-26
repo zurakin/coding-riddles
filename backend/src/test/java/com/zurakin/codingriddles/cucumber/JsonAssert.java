@@ -10,7 +10,10 @@ public class JsonAssert {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode expectedNode = mapper.readTree(expected);
         JsonNode actualNode = mapper.readTree(actual);
+        assertJsonEquals(actualNode, expectedNode);
+    }
 
+    private static void assertJsonEquals(JsonNode actualNode, JsonNode expectedNode) {
         if (expectedNode.isObject()) {
             Iterator<String> fieldNames = expectedNode.fieldNames();
             while (fieldNames.hasNext()) {
@@ -28,8 +31,22 @@ public class JsonAssert {
                     }
                 }
             }
+        } else if (expectedNode.isArray()) {
+            if (!actualNode.isArray() || actualNode.size() != expectedNode.size()) {
+                throw new AssertionError("Array size does not match.\nExpected: " + expectedNode.size() + "\nActual: " + actualNode.size() + "\nFull actual JSON: " + actualNode.toPrettyString());
+            }
+            for (int i = 0; i < expectedNode.size(); i++) {
+                JsonNode expectedElement = expectedNode.get(i);
+                JsonNode actualElement = actualNode.get(i);
+                if (expectedElement.isTextual() && "$JSON_IGNORE".equals(expectedElement.asText())) {
+                    // Ignore this element in comparison
+                    continue;
+                }
+                // Recursively compare elements
+                assertJsonEquals(actualElement, expectedElement);
+            }
         } else {
-            // For non-object nodes, compare directly
+            // For non-object and non-array nodes, compare directly
             if (!actualNode.equals(expectedNode)) {
                 throw new AssertionError("JSON does not match.\nExpected: " + expectedNode + "\nActual: " + actualNode + "\nFull actual JSON: " + actualNode.toPrettyString());
             }

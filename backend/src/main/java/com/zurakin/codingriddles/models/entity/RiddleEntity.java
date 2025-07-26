@@ -2,9 +2,9 @@ package com.zurakin.codingriddles.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Entity
 @Table(name="riddles")
@@ -35,4 +35,8 @@ public class RiddleEntity {
     @JoinColumn(name = "author_id")
     @Setter
     private UserEntity author;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 }
