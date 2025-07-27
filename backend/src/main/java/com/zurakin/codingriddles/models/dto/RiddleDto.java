@@ -12,6 +12,7 @@ public class RiddleDto {
     private String code;
     private String validationCode;
     private List<TestCaseDto> testCases;
-    private UserProfileDto author;
+    private AuthorDto author;
     private LocalDateTime createdAt;
+    private int solutionsCount;
 }

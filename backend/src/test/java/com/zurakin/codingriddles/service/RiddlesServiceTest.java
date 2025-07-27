@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,10 +34,11 @@ class RiddlesServiceTest {
     @BeforeEach
     void setUp() {
         riddleEntity = new RiddleEntity(1L,
-                "Reverse a String", "Write a function to reverse a string.", "def reverse_string(s):", "reverse_string('hello') == 'olleh'",
+                "Reverse a String", "Write a function to reverse a string.", "function reverseString(s) {\n\treturn \"\";\n}", "return reverseString(input);",
                 null,
                 null,
-                LocalDateTime.of(2001, 1, 4, 12, 0, 0));
+                LocalDateTime.of(2001, 1, 4, 12, 0, 0),
+                Collections.emptySet());
     }
 
     @Test

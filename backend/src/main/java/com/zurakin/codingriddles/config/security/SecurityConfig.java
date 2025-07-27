@@ -27,7 +27,8 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()              // allow register/login
                         .requestMatchers(HttpMethod.DELETE, "/api/riddles/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/riddles").authenticated()
-                        .requestMatchers("/user/**").authenticated()
+                        .requestMatchers("/api/completions/**").authenticated()
+                        .requestMatchers("/api/user/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

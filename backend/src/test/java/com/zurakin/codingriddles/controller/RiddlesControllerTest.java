@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -33,11 +34,12 @@ public class RiddlesControllerTest {
                 null, // let JPA generate ID
                 "Reverse a String",
                 "Write a function to reverse a string.",
-                "def reverse_string(s):",
-                "reverse_string('hello') == 'olleh'",
+                "function reverseString(s) {\n\treturn \"\";\n}",
+                "return reverseString(input);",
                 null, 
                 null,
-                LocalDateTime.of(2001, 1, 4, 12, 0, 0)
+                LocalDateTime.of(2001, 1, 4, 12, 0, 0),
+                Collections.emptySet()
         );
         riddlesRepository.save(riddleEntity);
     }

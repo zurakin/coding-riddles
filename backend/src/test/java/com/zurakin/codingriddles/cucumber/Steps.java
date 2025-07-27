@@ -98,6 +98,23 @@ public class Steps {
         lastResponse = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
     }
 
+    @When("I solve riddle with id {int} using code {string}")
+    public void i_solve_riddle_with_id_using_code(int riddleId, String code) throws JsonProcessingException {
+        String url = "/api/riddle-solutions";
+        HttpHeaders headers = bearerHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String body = String.format("{\"riddleId\":%d,\"answerCode\":%s}", riddleId, new ObjectMapper().writeValueAsString(code));
+        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+        lastResponse = restTemplate.postForEntity(url, entity, String.class);
+    }
+
+    @When("I get my solved riddles")
+    public void i_get_my_solved_riddles() {
+        String url = "/api/riddle-solutions";
+        HttpEntity<String> entity = new HttpEntity<>(null, bearerHeaders());
+        lastResponse = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+    }
+
     private HttpHeaders bearerHeaders() {
         HttpHeaders headers = new HttpHeaders();
         if (token != null) {

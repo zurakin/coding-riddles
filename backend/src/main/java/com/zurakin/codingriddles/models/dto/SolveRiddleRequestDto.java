@@ -5,7 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UserProfileDto {
-    private String username;
-    private int solvedRiddlesCount;
+public class SolveRiddleRequestDto {
+    private Long riddleId;
+    private String answerCode;
 }
+

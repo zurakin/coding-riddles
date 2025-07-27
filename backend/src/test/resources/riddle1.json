@@ -1,6 +1,6 @@
 {
     "title": "Reverse a String",
-    "description": "Write a function to reverse a given string.",
+    "description": "Write a function to reverse a string.",
     "code": "function reverseString(s) {\n\treturn \"\";\n}",
     "validationCode": "return reverseString(input);",
     "testCases": [
