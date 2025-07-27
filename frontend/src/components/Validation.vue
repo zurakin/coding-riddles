@@ -103,7 +103,7 @@ watch(() => props.riddle, resetValidationStatus);
         </div>
         <div v-else-if="riddle">
             <h2 class="text-2xl font-bold text-blue-900 mb-2 text-center">{{ riddle.title }}</h2>
-            <div v-if="riddle.author || riddle.createdAt" class="text-base text-blue-700 mb-2 text-center flex flex-col items-center gap-1">
+            <div v-if="riddle.author || riddle.createdAt || riddle.solutionsCount" class="text-base text-blue-700 mb-2 text-center flex flex-col items-center gap-1">
                 <div v-if="riddle.author">
                   <span class="font-semibold">Author:</span> {{ riddle.author.username }}
                 </div>
