@@ -1,7 +1,7 @@
 // src/Validator/LocalJavaScriptValidator.ts
 
 import type { Validator } from './Validator';
-import type { Riddle } from '../model/riddle';
+import type { Riddle } from '../model/models';
 
 export class LocalJavaScriptValidator implements Validator {
     validateTestCase(code: string, riddle: Riddle, testCaseIdx: number): { status: boolean, message: string } {

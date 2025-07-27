@@ -1,7 +1,8 @@
 <script setup lang="ts">
 
 import { ref, type Ref, watch, onMounted, defineProps } from 'vue';
-import type { Riddle } from '../model/riddle';
+import { SolutionsManagement } from '../RiddlesManagement/solutions_management';
+import type { Riddle } from '../model/models';
 import LoaderSpinner from './LoaderSpinner.vue';
 import { LocalJavaScriptValidator } from '../Validator/LocalJavaScriptValidator';
 import { timeAgo } from '../utils/timeAgo';
@@ -26,17 +27,46 @@ const runningAll = ref(false);
 const allResults = ref<{ index: number, status: 'passed' | 'failed', message: string }[] | null>(null);
 
 async function runAllTestCases() {
-    if (!props.riddle || !props.code || !props.riddle.testCases) return;
+    if (!props.riddle || !props.code || !props.riddle.testCases) return false;
     runningAll.value = true;
     allResults.value = null;
     const results: { index: number, status: 'passed' | 'failed', message: string }[] = [];
+    let allPassed = true;
     for (let i = 0; i < props.riddle.testCases.length; i++) {
         const result = validator.validateTestCase(props.code, props.riddle, i);
         results.push({ index: i, status: result.status ? 'passed' : 'failed', message: result.message });
         statusPerTestCase.value[i] = result.status ? 'passed' : 'failed';
+        if (!result.status) allPassed = false;
     }
     allResults.value = results;
     runningAll.value = false;
+    return allPassed;
+}
+
+const solutionsManagement = new SolutionsManagement();
+const submitLoading = ref(false);
+const submitMessage = ref<string|null>(null);
+
+async function handleSubmit() {
+    submitMessage.value = null;
+    if (!props.riddle || !props.code) {
+        submitMessage.value = 'Riddle or code missing.';
+        return;
+    }
+    const allPassed = await runAllTestCases();
+    if (!allPassed) {
+        submitMessage.value = 'Not all test cases passed. Please fix your code.';
+        return;
+    }
+    submitLoading.value = true;
+    try {
+        await solutionsManagement.postSolvedRiddle(props.riddle.id, props.code);
+        submitMessage.value = 'Solution submitted successfully!';
+    } catch (e: any) {
+        submitMessage.value = e?.message || 'Failed to submit solution.';
+    } finally {
+        submitLoading.value = false;
+    }
 }
 
 const handleTestCaseClick = (testCaseId: number) => {
@@ -80,6 +110,9 @@ watch(() => props.riddle, resetValidationStatus);
                 <div v-if="riddle.createdAt">
                   <span class="font-semibold">Created:</span> {{ timeAgo(riddle.createdAt) }}
                 </div>
+                <div v-if="riddle.solutionsCount !== undefined && riddle.solutionsCount !== null" class="text-base text-blue-700">
+                  <span class="font-semibold">Solved by:</span> {{ riddle.solutionsCount }} user{{ riddle.solutionsCount === 1 ? '' : 's' }}
+                </div>
             </div>
             <div class="mb-4 text-center max-h-[40vh] overflow-y-auto bg-white/80 rounded-lg p-4 relative scrollable-section">
                 <p class="text-gray-700 italic mt-2 whitespace-pre-line">{{ riddle.description }}</p>
@@ -87,13 +120,25 @@ watch(() => props.riddle, resetValidationStatus);
             <div class="scroll-fade-bottom"></div>
             <h3 class="text-2xl font-semibold text-blue-700 mt-6 mb-2 text-center">Test Cases</h3>
             <div class="flex flex-col items-center gap-2 mb-2">
-                <button
-                  class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 font-semibold mb-2"
-                  @click="runAllTestCases"
-                  :disabled="runningAll"
-                >
-                  {{ runningAll ? 'Running...' : 'Run All Test Cases' }}
-                </button>
+                <div class="flex flex-row w-full gap-2">
+                  <button
+                    class="px-4 py-2 bg-teal-600 text-white rounded-lg shadow-lg hover:bg-teal-700 font-bold w-full border-2 border-teal-900"
+                    @click="runAllTestCases"
+                    :disabled="runningAll"
+                  >
+                    {{ runningAll ? 'Running...' : 'Run All Test Cases' }}
+                  </button>
+                  <button
+                    class="px-4 py-2 bg-cyan-600 text-white rounded-lg shadow-lg hover:bg-cyan-700 font-bold w-full border-2 border-cyan-900"
+                    @click="handleSubmit"
+                    :disabled="runningAll || submitLoading"
+                  >
+                    {{ submitLoading ? 'Submitting...' : 'Submit Solution' }}
+                  </button>
+                </div>
+                <div v-if="submitMessage" class="w-full max-w-xl mt-2 text-center">
+                  <span :class="submitMessage.includes('success') ? 'text-green-700' : 'text-red-700'">{{ submitMessage }}</span>
+                </div>
                 <div v-if="allResults" class="w-full max-w-xl mt-2">
                   <table class="w-full border text-sm">
                     <thead>

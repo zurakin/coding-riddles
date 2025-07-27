@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { Riddle } from '../model/riddle';
+import type { Riddle } from '../model/models';
 
 export const useRiddlePreviewStore = defineStore('riddlePreview', {
   state: () => ({

@@ -16,6 +16,7 @@ public class JsonAssert {
     private static void assertJsonEquals(JsonNode actualNode, JsonNode expectedNode) {
         if (expectedNode.isObject()) {
             Iterator<String> fieldNames = expectedNode.fieldNames();
+            // Check for missing or mismatched fields
             while (fieldNames.hasNext()) {
                 String field = fieldNames.next();
                 JsonNode expectedValue = expectedNode.get(field);
@@ -29,6 +30,14 @@ public class JsonAssert {
                     if (!actualNode.has(field) || !actualNode.get(field).equals(expectedValue)) {
                         throw new AssertionError("Field '" + field + "' does not match.\nExpected: " + expectedValue + "\nActual: " + actualNode.get(field) + "\nFull actual JSON: " + actualNode.toPrettyString());
                     }
+                }
+            }
+            // Check for extra fields in actualNode
+            Iterator<String> actualFieldNames = actualNode.fieldNames();
+            while (actualFieldNames.hasNext()) {
+                String actualField = actualFieldNames.next();
+                if (!expectedNode.has(actualField)) {
+                    throw new AssertionError("Unexpected field '" + actualField + "' found in actual JSON but not in expected.\nFull actual JSON: " + actualNode.toPrettyString());
                 }
             }
         } else if (expectedNode.isArray()) {

@@ -20,7 +20,7 @@ Feature: FMEA
     # --- List and get riddles ---
     When I list riddles
     Then the status should be 200
-    Then the response should match the json "list_riddles2_response.json"
+    Then the response should match the json "list_riddles_response.json"
     When I get the riddle with id 1
     Then the status should be 200
     Then the response should match the json "get_riddle_1_response.json"
@@ -39,6 +39,11 @@ Feature: FMEA
     When I get the riddle with id 1
     Then the status should be 200
     Then the response should match the json 'get_riddle_1_response_solved.json'
+
+    # --- Listing riddles after solving ---
+    When I list riddles
+    Then the status should be 200
+    Then the response should match the json "list_riddles_solved_response.json"
 
     # --- Second user solves the same riddle ---
     When I sign up with username "user2" and password "user2"

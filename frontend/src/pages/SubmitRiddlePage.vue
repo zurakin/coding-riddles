@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import LoaderSpinner from '../components/LoaderSpinner.vue';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
-import type { TestCase } from '../model/riddle';
+import type { TestCase } from '../model/models';
 
 import { useRouter } from 'vue-router';
 import { useRiddlePreviewStore } from '../stores/riddlePreviewStore';

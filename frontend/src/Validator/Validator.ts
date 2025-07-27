@@ -1,6 +1,6 @@
 // src/Validator/Validator.ts
 
-import type { Riddle } from '../model/riddle';
+import type { Riddle } from '../model/models';
 
 export interface Validator {
     validateTestCase(

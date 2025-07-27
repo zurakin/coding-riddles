@@ -9,6 +9,12 @@
           <div class="w-full mt-1 pb-1 border-b border-slate-300 text-lg text-slate-700 font-bold select-text">{{
             user.username }}</div>
         </div>
+        <div class="mb-6">
+          <label class="block text-gray-700 mb-1">Solved Riddles</label>
+          <div class="w-full mt-1 pb-1 border-b border-slate-300 text-lg text-slate-700 font-bold select-text">
+            {{ user.solvedRiddlesCount }}
+          </div>
+        </div>
         <button
           class="w-full mt-2 py-2 px-4 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition-colors"
           @click="signOut">
@@ -28,11 +34,12 @@
 import { ref, onMounted, defineProps, defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
 import { UserManagement } from '../UserManagement/user_management';
+import type { UserProfile } from '../model/models';
 
 const props = defineProps<{ signOut?: () => void; username?: string }>();
 const emit = defineEmits(['profile-updated']);
 
-const user = ref<{ username: string } | null>(null);
+const user = ref<UserProfile | null>(null);
 const error = ref('');
 const router = useRouter();
 

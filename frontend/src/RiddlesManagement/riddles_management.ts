@@ -1,9 +1,10 @@
-import type { Riddle } from '../model/riddle';
+import type { Riddle } from '../model/models';
 
 export class RiddlesManagement {
     async getRiddle(id: number) {
         try {
-            const response = await fetch(`/api/riddles/${id}`);
+            const headers = this.getAuthHeaders();
+            const response = await fetch(`/api/riddles/${id}`, { headers });
             const data = await response.json();
             return data;
         } catch (error) {
@@ -19,9 +20,7 @@ export class RiddlesManagement {
         try {
             await fetch(`/api/riddles/${id}`, {
                 method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: this.getAuthHeaders(),
             });
         } catch (error) {
             console.error('Error deleting riddle:', error);
@@ -30,7 +29,8 @@ export class RiddlesManagement {
 
     async listRiddles() {
         try {
-            const response = await fetch('/api/riddles');
+            const headers = this.getAuthHeaders();
+            const response = await fetch('/api/riddles', { headers });
             const data = await response.json();
             return data;
         } catch (error) {
@@ -44,12 +44,10 @@ export class RiddlesManagement {
             throw new Error('User must be authenticated to submit a riddle');
         }
         try {
+            const headers = this.getAuthHeaders({ 'Content-Type': 'application/json' });
             const response = await fetch('/api/riddles', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
+                headers,
                 body: JSON.stringify(riddle)
             });
             if (!response.ok) {
@@ -60,5 +58,12 @@ export class RiddlesManagement {
         } catch (error) {
             throw error;
         }
+    }
+    
+    private getAuthHeaders(extraHeaders: Record<string, string> = {}): Record<string, string> {
+        const token = localStorage.getItem('token');
+        const headers: Record<string, string> = { ...extraHeaders };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        return headers;
     }
 }
