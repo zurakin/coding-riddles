@@ -1,3 +1,5 @@
+import type { UserProfile } from '../model/models';
+
 export class UserManagement {
     isAuthenticated(): boolean {
         return !!localStorage.getItem('token');
@@ -29,7 +31,7 @@ export class UserManagement {
         return data.token;
     }
 
-    async getProfile(token: string): Promise<{ username: string }> {
+    async getProfile(token: string): Promise<UserProfile> {
         const response = await fetch('/api/user', {
             headers: { 'Authorization': `Bearer ${token}` }
         });

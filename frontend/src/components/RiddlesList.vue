@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import type { Riddle } from '../model/riddle';
+import type { Riddle } from '../model/models';
 import { defineEmits } from 'vue';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 

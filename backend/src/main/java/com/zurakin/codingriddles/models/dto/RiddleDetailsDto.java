@@ -11,4 +11,5 @@ public class RiddleDetailsDto {
     private String title;
     private String description;
     private LocalDateTime createdAt;
+    private boolean completedByCurrentUser;
 }

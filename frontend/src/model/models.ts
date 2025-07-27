@@ -1,3 +1,7 @@
+export interface UserProfile {
+  username: string;
+  solvedRiddlesCount: number;
+}
 export interface Riddle {
   id: number;
   title: string;
@@ -8,6 +12,8 @@ export interface Riddle {
   functionName?: string;
   author?: Author;
   createdAt?: string;
+  solutionsCount?: number;
+  completedByCurrentUser?: boolean;
 }
 
 export interface TestCase {

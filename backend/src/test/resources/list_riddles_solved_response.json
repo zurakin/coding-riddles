@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "title": "Reverse a String",
+        "description": "Write a function to reverse a string.",
+        "createdAt": "$JSON_IGNORE",
+        "completedByCurrentUser": true
+    },
+    {
+        "id": 2,
+        "title": "Sum Two Numbers",
+        "description": "Write a function that returns the sum of two numbers.",
+        "createdAt": "$JSON_IGNORE",
+        "completedByCurrentUser": false
+    }
+]

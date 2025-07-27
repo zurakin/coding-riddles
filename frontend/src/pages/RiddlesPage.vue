@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import type { Riddle } from '../model/riddle';
+import type { Riddle } from '../model/models';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 import { useRouter } from 'vue-router';
 import LoaderSpinner from '../components/LoaderSpinner.vue';
@@ -26,7 +26,12 @@ function goToRiddle(riddleId: number) {
       <LoaderSpinner />
     </div>
     <ul v-else class="space-y-4">
-      <li v-for="riddle in riddles" :key="riddle.id" class="bg-blue-50 rounded-lg p-4 border border-blue-100 hover:bg-blue-100 cursor-pointer transition" @click="goToRiddle(riddle.id)">
+      <li v-for="riddle in riddles" :key="riddle.id"
+          :class="[
+            'rounded-lg p-4 border cursor-pointer transition',
+            riddle.completedByCurrentUser ? 'bg-teal-100 border-teal-300 hover:bg-teal-200' : 'bg-blue-50 border-blue-100 hover:bg-blue-100'
+          ]"
+          @click="goToRiddle(riddle.id)">
         <h3 class="text-lg font-bold text-blue-900 mb-1">{{ riddle.title }}</h3>
         <p class="text-gray-700 text-base">
           {{ riddle.description.length > 180 ? riddle.description.slice(0, 180) + '...' : riddle.description }}

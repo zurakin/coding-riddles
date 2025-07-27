@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import Validation from '../components/Validation.vue';
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
-import type { Riddle } from '../model/riddle';
+import type { Riddle } from '../model/models';
 
 
 const props = defineProps<{

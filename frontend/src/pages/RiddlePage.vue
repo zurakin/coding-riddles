@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type Ref, onMounted } from 'vue';
-import type { Riddle } from '../model/riddle';
+import type { Riddle } from '../model/models';
 import { RiddlesManagement } from '../RiddlesManagement/riddles_management';
 import { useRoute, useRouter } from 'vue-router';
 import RiddleView from '../components/RiddleView.vue';
