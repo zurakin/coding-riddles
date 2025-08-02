@@ -45,6 +45,11 @@ const routes: RouteRecordRaw[] = [
   },
 
   {
+    path: '/leaderboard',
+    name: 'Leaderboard',
+    component: () => import('./pages/LeaderboardPage.vue')
+  },
+  {
     path: '/profile',
     name: 'Profile',
     component: () => import('./pages/Profile.vue')

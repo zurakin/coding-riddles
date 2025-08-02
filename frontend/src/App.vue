@@ -43,6 +43,7 @@ onMounted(fetchProfile);
     <nav class="w-full bg-blue-700 text-white px-8 py-2 flex items-center gap-6 shadow">
       <router-link to="/riddles" class="hover:underline font-semibold">Solve</router-link>
       <router-link to="/submit" class="hover:underline font-semibold">Create</router-link>
+      <router-link to="/leaderboard" class="hover:underline font-semibold">Leaderboard</router-link>
       <router-link to="/about" class="hover:underline font-semibold">About</router-link>
       <router-link
         v-if="username"

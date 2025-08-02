@@ -115,6 +115,13 @@ public class Steps {
         lastResponse = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
     }
 
+    @When("I get the leaderboard")
+    public void i_get_the_leaderboard() {
+        String url = "/api/user/leaderboard";
+        HttpEntity<String> entity = new HttpEntity<>(null, bearerHeaders());
+        lastResponse = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+    }
+
     private HttpHeaders bearerHeaders() {
         HttpHeaders headers = new HttpHeaders();
         if (token != null) {
