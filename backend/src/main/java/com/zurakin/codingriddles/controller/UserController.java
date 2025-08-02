@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -30,5 +32,13 @@ public class UserController {
         }
 
         return userProfileMapper.toDto(user.get());
+    }
+
+    @GetMapping("/leaderboard")
+    public List<UserProfileDto> getLeaderboard() {
+        var topUsers = userRepository.findTop10BySolvedRiddles();
+        return topUsers.stream()
+                .map(userProfileMapper::toDto)
+                .toList();
     }
 }

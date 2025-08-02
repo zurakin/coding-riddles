@@ -1,6 +1,14 @@
 import type { UserProfile } from '../model/models';
 
 export class UserManagement {
+    async getLeaderboard(): Promise<{ username: string; solvedRiddlesCount: number }[]> {
+        const token = localStorage.getItem('token');
+        const headers: Record<string, string> = {};
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        const response = await fetch('/api/user/leaderboard', { headers });
+        if (!response.ok) throw new Error('Failed to fetch leaderboard');
+        return await response.json();
+    }
     isAuthenticated(): boolean {
         return !!localStorage.getItem('token');
     }

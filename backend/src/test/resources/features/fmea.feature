@@ -66,6 +66,11 @@ Feature: FMEA
     Then the status should be 200
     Then the response should match the json 'get_riddle_1_response_solved_twice.json'
 
+    # --- Leaderboard endpoint test ---
+    When I get the leaderboard
+    Then the status should be 200
+    Then the response should match the json "leaderboard_response.json"
+
     # --- Unauthorized delete attempts ---
     When I sign out
     When I try to delete the riddle with id 1
