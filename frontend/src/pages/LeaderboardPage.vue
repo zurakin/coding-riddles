@@ -25,7 +25,8 @@ onMounted(async () => {
 
 <template>
   <div class="w-full max-w-2xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-xl border border-blue-200">
-    <h2 class="text-3xl font-extrabold text-blue-700 mb-6 text-center">Leaderboard</h2>
+    <h2 class="text-3xl font-extrabold text-blue-700 mb-2 text-center">Leaderboard</h2>
+    <div class="text-center text-blue-500 mb-4 text-base font-semibold">Top 10 users by solved riddles</div>
     <div v-if="loading" class="flex justify-center items-center py-12">
       <span>Loading...</span>
     </div>
@@ -33,12 +34,14 @@ onMounted(async () => {
     <table v-else class="w-full border text-lg">
       <thead>
         <tr class="bg-blue-100">
+          <th class="p-3 border text-left">Rank</th>
           <th class="p-3 border text-left">User</th>
           <th class="p-3 border text-left">Solved Riddles</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.username" class="hover:bg-blue-50">
+        <tr v-for="(user, idx) in users" :key="user.username" class="hover:bg-blue-50">
+          <td class="p-3 border font-bold text-blue-700">{{ idx + 1 }}</td>
           <td class="p-3 border font-bold text-blue-900">{{ user.username }}</td>
           <td class="p-3 border text-teal-700">{{ user.solvedRiddlesCount }}</td>
         </tr>
