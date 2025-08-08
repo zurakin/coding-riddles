@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUsername(String username);
 
-    // Returns the top 10 users sorted by number of solved riddles
-    @Query("SELECT u FROM UserEntity u LEFT JOIN SolvedRiddleEntity s ON u.id = s.user.id GROUP BY u.id ORDER BY COUNT(s.id) DESC")
+    // Returns the top 10 users sorted by number of solved riddles, then by user id for deterministic order
+    @Query("SELECT u FROM UserEntity u LEFT JOIN SolvedRiddleEntity s ON u.id = s.user.id GROUP BY u.id ORDER BY COUNT(s.id) DESC, u.id ASC")
     List<UserEntity> findTop10BySolvedRiddles();
 }
