@@ -134,4 +134,11 @@ public class Steps {
     public void iSignOut() {
         token = null;
     }
+
+    @When("I check the health of the service")
+    public void iCheckTheHealthOfTheService() {
+        String url = "/api/health";
+        HttpEntity<String> entity = new HttpEntity<>(null, bearerHeaders());
+        lastResponse = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+    }
 }

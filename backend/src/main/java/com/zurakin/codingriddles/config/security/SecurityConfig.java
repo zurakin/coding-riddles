@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/riddles").authenticated()
                         .requestMatchers("/api/completions/**").authenticated()
                         .requestMatchers("/api/user/**").permitAll()
+                        .requestMatchers("/api/health/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
