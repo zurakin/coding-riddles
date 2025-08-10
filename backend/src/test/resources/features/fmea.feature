@@ -1,7 +1,10 @@
 Feature: FMEA
 
-  # --- User zura happy path ---
   Scenario: Happy path
+    # Health check
+    When I check the health of the service
+    Then the status should be 200
+
     # --- Sign up and log in as zura ---
     When I sign up with username "zura" and password "toor"
     Then the status should be 200
