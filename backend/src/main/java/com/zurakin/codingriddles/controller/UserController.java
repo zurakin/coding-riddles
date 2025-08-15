@@ -1,6 +1,7 @@
 package com.zurakin.codingriddles.controller;
 
 
+import com.zurakin.codingriddles.models.dto.LeaderboardEntryDto;
 import com.zurakin.codingriddles.models.dto.UserProfileDto;
 import com.zurakin.codingriddles.models.mapper.UserProfileMapper;
 import com.zurakin.codingriddles.repository.UserRepository;
@@ -35,10 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/leaderboard")
-    public List<UserProfileDto> getLeaderboard() {
-        var topUsers = userRepository.findTop10BySolvedRiddles();
-        return topUsers.stream()
-                .map(userProfileMapper::toDto)
-                .toList();
+    public List<LeaderboardEntryDto> getLeaderboard() {
+        return userRepository.findTop10LeaderboardEntries();
     }
 }
