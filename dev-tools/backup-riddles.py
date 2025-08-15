@@ -1,16 +1,15 @@
 import requests
 import json
 import os
-
-
+from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 ADDR = os.getenv("ADDR")
-API_BASE_URL = "{}/api/riddles".format(ADDR)
+API_BASE_URL = f"{ADDR}/api/riddles"
 
-OUTPUT_DIR = "riddles_backup"
-
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+OUTPUT_DIR = os.path.join("riddles_backup", timestamp)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def remove_ids(obj):
